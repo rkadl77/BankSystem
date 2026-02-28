@@ -104,4 +104,3 @@ C:\Users\rkadl\source\repos\BankSystem\BankSystem\obj\Debug\net8.0\refint\BankSy
 C:\Users\rkadl\source\repos\BankSystem\BankSystem\obj\Debug\net8.0\BankSystem.pdb
 C:\Users\rkadl\source\repos\BankSystem\BankSystem\obj\Debug\net8.0\BankSystem.genruntimeconfig.cache
 C:\Users\rkadl\source\repos\BankSystem\BankSystem\obj\Debug\net8.0\ref\BankSystem.dll
-C:\Users\rkadl\source\repos\BankSystem\BankSystem\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
