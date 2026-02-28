@@ -3,56 +3,60 @@
   "WorkspaceRootPath": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{85297E3F-5F06-4DFE-8CEF-C67835999B60}|BankSystem\\BankSystem.csproj|c:\\users\\rkadl\\source\\repos\\banksystem\\banksystem\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{85297E3F-5F06-4DFE-8CEF-C67835999B60}|BankSystem\\BankSystem.csproj|solutionrelative:banksystem\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DCE33CAC-6FB3-4A7B-9157-7A26F6BDEE98}|BankSystem.Users\\BankSystem.Users.csproj|c:\\users\\rkadl\\source\\repos\\banksystem\\banksystem.users\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DCE33CAC-6FB3-4A7B-9157-7A26F6BDEE98}|BankSystem.Users\\BankSystem.Users.csproj|solutionrelative:banksystem.users\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{85297E3F-5F06-4DFE-8CEF-C67835999B60}|BankSystem\\BankSystem.csproj|c:\\users\\rkadl\\source\\repos\\banksystem\\banksystem\\services\\transactionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{85297E3F-5F06-4DFE-8CEF-C67835999B60}|BankSystem\\BankSystem.csproj|solutionrelative:banksystem\\services\\transactionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DCE33CAC-6FB3-4A7B-9157-7A26F6BDEE98}|BankSystem.Users\\BankSystem.Users.csproj|c:\\users\\rkadl\\source\\repos\\banksystem\\banksystem.users\\banksystem.users.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{DCE33CAC-6FB3-4A7B-9157-7A26F6BDEE98}|BankSystem.Users\\BankSystem.Users.csproj|solutionrelative:banksystem.users\\banksystem.users.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{85297E3F-5F06-4DFE-8CEF-C67835999B60}|BankSystem\\BankSystem.csproj|c:\\users\\rkadl\\source\\repos\\banksystem\\banksystem\\dtos\\transactiondto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{85297E3F-5F06-4DFE-8CEF-C67835999B60}|BankSystem\\BankSystem.csproj|solutionrelative:banksystem\\dtos\\transactiondto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DCE33CAC-6FB3-4A7B-9157-7A26F6BDEE98}|BankSystem.Users\\BankSystem.Users.csproj|c:\\users\\rkadl\\source\\repos\\banksystem\\banksystem.users\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{DCE33CAC-6FB3-4A7B-9157-7A26F6BDEE98}|BankSystem.Users\\BankSystem.Users.csproj|solutionrelative:banksystem.users\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{85297E3F-5F06-4DFE-8CEF-C67835999B60}|BankSystem\\BankSystem.csproj|c:\\users\\rkadl\\source\\repos\\banksystem\\banksystem\\controllers\\transactionscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{85297E3F-5F06-4DFE-8CEF-C67835999B60}|BankSystem\\BankSystem.csproj|solutionrelative:banksystem\\controllers\\transactionscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DCE33CAC-6FB3-4A7B-9157-7A26F6BDEE98}|BankSystem.Users\\BankSystem.Users.csproj|c:\\users\\rkadl\\source\\repos\\banksystem\\banksystem.users\\controllers\\employeescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DCE33CAC-6FB3-4A7B-9157-7A26F6BDEE98}|BankSystem.Users\\BankSystem.Users.csproj|solutionrelative:banksystem.users\\controllers\\employeescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{85297E3F-5F06-4DFE-8CEF-C67835999B60}|BankSystem\\BankSystem.csproj|c:\\users\\rkadl\\source\\repos\\banksystem\\banksystem\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{85297E3F-5F06-4DFE-8CEF-C67835999B60}|BankSystem\\BankSystem.csproj|solutionrelative:banksystem\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+      "AbsoluteMoniker": "D:0:0:{DCE33CAC-6FB3-4A7B-9157-7A26F6BDEE98}|BankSystem.Users\\BankSystem.Users.csproj|c:\\users\\rkadl\\source\\repos\\banksystem\\banksystem.users\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DCE33CAC-6FB3-4A7B-9157-7A26F6BDEE98}|BankSystem.Users\\BankSystem.Users.csproj|solutionrelative:banksystem.users\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{85297E3F-5F06-4DFE-8CEF-C67835999B60}|BankSystem\\BankSystem.csproj|c:\\users\\rkadl\\source\\repos\\banksystem\\banksystem\\data\\banksystemcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{85297E3F-5F06-4DFE-8CEF-C67835999B60}|BankSystem\\BankSystem.csproj|solutionrelative:banksystem\\data\\banksystemcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DCE33CAC-6FB3-4A7B-9157-7A26F6BDEE98}|BankSystem.Users\\BankSystem.Users.csproj|c:\\users\\rkadl\\source\\repos\\banksystem\\banksystem.users\\services\\employeeservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DCE33CAC-6FB3-4A7B-9157-7A26F6BDEE98}|BankSystem.Users\\BankSystem.Users.csproj|solutionrelative:banksystem.users\\services\\employeeservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{85297E3F-5F06-4DFE-8CEF-C67835999B60}|BankSystem\\BankSystem.csproj|c:\\users\\rkadl\\source\\repos\\banksystem\\banksystem\\services\\accountservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{85297E3F-5F06-4DFE-8CEF-C67835999B60}|BankSystem\\BankSystem.csproj|solutionrelative:banksystem\\services\\accountservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DCE33CAC-6FB3-4A7B-9157-7A26F6BDEE98}|BankSystem.Users\\BankSystem.Users.csproj|c:\\users\\rkadl\\source\\repos\\banksystem\\banksystem.users\\services\\iemployeeservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DCE33CAC-6FB3-4A7B-9157-7A26F6BDEE98}|BankSystem.Users\\BankSystem.Users.csproj|solutionrelative:banksystem.users\\services\\iemployeeservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{85297E3F-5F06-4DFE-8CEF-C67835999B60}|BankSystem\\BankSystem.csproj|c:\\users\\rkadl\\source\\repos\\banksystem\\banksystem\\dtos\\accountdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{85297E3F-5F06-4DFE-8CEF-C67835999B60}|BankSystem\\BankSystem.csproj|solutionrelative:banksystem\\dtos\\accountdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DCE33CAC-6FB3-4A7B-9157-7A26F6BDEE98}|BankSystem.Users\\BankSystem.Users.csproj|c:\\users\\rkadl\\source\\repos\\banksystem\\banksystem.users\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DCE33CAC-6FB3-4A7B-9157-7A26F6BDEE98}|BankSystem.Users\\BankSystem.Users.csproj|solutionrelative:banksystem.users\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{85297E3F-5F06-4DFE-8CEF-C67835999B60}|BankSystem\\BankSystem.csproj|c:\\users\\rkadl\\source\\repos\\banksystem\\banksystem\\models\\transaction.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{85297E3F-5F06-4DFE-8CEF-C67835999B60}|BankSystem\\BankSystem.csproj|solutionrelative:banksystem\\models\\transaction.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DCE33CAC-6FB3-4A7B-9157-7A26F6BDEE98}|BankSystem.Users\\BankSystem.Users.csproj|c:\\users\\rkadl\\source\\repos\\banksystem\\banksystem.users\\services\\iuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DCE33CAC-6FB3-4A7B-9157-7A26F6BDEE98}|BankSystem.Users\\BankSystem.Users.csproj|solutionrelative:banksystem.users\\services\\iuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{85297E3F-5F06-4DFE-8CEF-C67835999B60}|BankSystem\\BankSystem.csproj|c:\\users\\rkadl\\source\\repos\\banksystem\\banksystem\\models\\account.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{85297E3F-5F06-4DFE-8CEF-C67835999B60}|BankSystem\\BankSystem.csproj|solutionrelative:banksystem\\models\\account.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DCE33CAC-6FB3-4A7B-9157-7A26F6BDEE98}|BankSystem.Users\\BankSystem.Users.csproj|c:\\users\\rkadl\\source\\repos\\banksystem\\banksystem.users\\data\\usersdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DCE33CAC-6FB3-4A7B-9157-7A26F6BDEE98}|BankSystem.Users\\BankSystem.Users.csproj|solutionrelative:banksystem.users\\data\\usersdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{85297E3F-5F06-4DFE-8CEF-C67835999B60}|BankSystem\\BankSystem.csproj|c:\\users\\rkadl\\source\\repos\\banksystem\\banksystem\\controllers\\accountscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{85297E3F-5F06-4DFE-8CEF-C67835999B60}|BankSystem\\BankSystem.csproj|solutionrelative:banksystem\\controllers\\accountscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DCE33CAC-6FB3-4A7B-9157-7A26F6BDEE98}|BankSystem.Users\\BankSystem.Users.csproj|c:\\users\\rkadl\\source\\repos\\banksystem\\banksystem.users\\dtos\\employeedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DCE33CAC-6FB3-4A7B-9157-7A26F6BDEE98}|BankSystem.Users\\BankSystem.Users.csproj|solutionrelative:banksystem.users\\dtos\\employeedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{85297E3F-5F06-4DFE-8CEF-C67835999B60}|BankSystem\\BankSystem.csproj|c:\\users\\rkadl\\source\\repos\\banksystem\\banksystem\\services\\itransactionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{85297E3F-5F06-4DFE-8CEF-C67835999B60}|BankSystem\\BankSystem.csproj|solutionrelative:banksystem\\services\\itransactionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DCE33CAC-6FB3-4A7B-9157-7A26F6BDEE98}|BankSystem.Users\\BankSystem.Users.csproj|c:\\users\\rkadl\\source\\repos\\banksystem\\banksystem.users\\dtos\\userdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DCE33CAC-6FB3-4A7B-9157-7A26F6BDEE98}|BankSystem.Users\\BankSystem.Users.csproj|solutionrelative:banksystem.users\\dtos\\userdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{85297E3F-5F06-4DFE-8CEF-C67835999B60}|BankSystem\\BankSystem.csproj|c:\\users\\rkadl\\source\\repos\\banksystem\\banksystem\\services\\iaccountservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{85297E3F-5F06-4DFE-8CEF-C67835999B60}|BankSystem\\BankSystem.csproj|solutionrelative:banksystem\\services\\iaccountservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DCE33CAC-6FB3-4A7B-9157-7A26F6BDEE98}|BankSystem.Users\\BankSystem.Users.csproj|c:\\users\\rkadl\\source\\repos\\banksystem\\banksystem.users\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DCE33CAC-6FB3-4A7B-9157-7A26F6BDEE98}|BankSystem.Users\\BankSystem.Users.csproj|solutionrelative:banksystem.users\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DCE33CAC-6FB3-4A7B-9157-7A26F6BDEE98}|BankSystem.Users\\BankSystem.Users.csproj|c:\\users\\rkadl\\source\\repos\\banksystem\\banksystem.users\\models\\employee.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DCE33CAC-6FB3-4A7B-9157-7A26F6BDEE98}|BankSystem.Users\\BankSystem.Users.csproj|solutionrelative:banksystem.users\\models\\employee.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -70,171 +74,184 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "Transaction.cs",
-              "DocumentMoniker": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem\\Models\\Transaction.cs",
-              "RelativeDocumentMoniker": "BankSystem\\Models\\Transaction.cs",
-              "ToolTip": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem\\Models\\Transaction.cs",
-              "RelativeToolTip": "BankSystem\\Models\\Transaction.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-28T15:36:46.569Z",
+              "DocumentIndex": 1,
+              "Title": "BankSystem.Users",
+              "DocumentMoniker": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem.Users\\BankSystem.Users.csproj",
+              "RelativeDocumentMoniker": "BankSystem.Users\\BankSystem.Users.csproj",
+              "ToolTip": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem.Users\\BankSystem.Users.csproj",
+              "RelativeToolTip": "BankSystem.Users\\BankSystem.Users.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-02-28T17:02:02.023Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "Account.cs",
-              "DocumentMoniker": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem\\Models\\Account.cs",
-              "RelativeDocumentMoniker": "BankSystem\\Models\\Account.cs",
-              "ToolTip": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem\\Models\\Account.cs",
-              "RelativeToolTip": "BankSystem\\Models\\Account.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-28T15:36:39.009Z",
+              "DocumentIndex": 2,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem.Users\\appsettings.json",
+              "RelativeDocumentMoniker": "BankSystem.Users\\appsettings.json",
+              "ToolTip": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem.Users\\appsettings.json",
+              "RelativeToolTip": "BankSystem.Users\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-02-28T16:59:43.788Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem\\Program.cs",
-              "RelativeDocumentMoniker": "BankSystem\\Program.cs",
-              "ToolTip": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem\\Program.cs",
-              "RelativeToolTip": "BankSystem\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAAKAAAAAAAAAA==",
+              "DocumentMoniker": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem.Users\\Program.cs",
+              "RelativeDocumentMoniker": "BankSystem.Users\\Program.cs",
+              "ToolTip": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem.Users\\Program.cs",
+              "RelativeToolTip": "BankSystem.Users\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAAKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-28T15:33:13.757Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "TransactionService.cs",
-              "DocumentMoniker": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem\\Services\\TransactionService.cs",
-              "RelativeDocumentMoniker": "BankSystem\\Services\\TransactionService.cs",
-              "ToolTip": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem\\Services\\TransactionService.cs",
-              "RelativeToolTip": "BankSystem\\Services\\TransactionService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB0AAAAaAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-28T15:33:01.631Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "ITransactionService.cs",
-              "DocumentMoniker": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem\\Services\\ITransactionService.cs",
-              "RelativeDocumentMoniker": "BankSystem\\Services\\ITransactionService.cs",
-              "ToolTip": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem\\Services\\ITransactionService.cs",
-              "RelativeToolTip": "BankSystem\\Services\\ITransactionService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-28T15:32:50.926Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "AccountService.cs",
-              "DocumentMoniker": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem\\Services\\AccountService.cs",
-              "RelativeDocumentMoniker": "BankSystem\\Services\\AccountService.cs",
-              "ToolTip": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem\\Services\\AccountService.cs",
-              "RelativeToolTip": "BankSystem\\Services\\AccountService.cs",
-              "ViewState": "AgIAABMAAAAAAAAAAAAgwE8AAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-28T15:32:31.22Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "IAccountService.cs",
-              "DocumentMoniker": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem\\Services\\IAccountService.cs",
-              "RelativeDocumentMoniker": "BankSystem\\Services\\IAccountService.cs",
-              "ToolTip": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem\\Services\\IAccountService.cs",
-              "RelativeToolTip": "BankSystem\\Services\\IAccountService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-28T15:32:20.391Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "BankSystemContext.cs",
-              "DocumentMoniker": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem\\Data\\BankSystemContext.cs",
-              "RelativeDocumentMoniker": "BankSystem\\Data\\BankSystemContext.cs",
-              "ToolTip": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem\\Data\\BankSystemContext.cs",
-              "RelativeToolTip": "BankSystem\\Data\\BankSystemContext.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACwAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-28T15:30:42.448Z",
+              "WhenOpened": "2026-02-28T16:59:33.241Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "TransactionsController.cs",
-              "DocumentMoniker": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem\\Controllers\\TransactionsController.cs",
-              "RelativeDocumentMoniker": "BankSystem\\Controllers\\TransactionsController.cs",
-              "ToolTip": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem\\Controllers\\TransactionsController.cs",
-              "RelativeToolTip": "BankSystem\\Controllers\\TransactionsController.cs",
-              "ViewState": "AgIAABgAAAAAAAAAAAAAwEIAAAABAAAAAAAAAA==",
+              "Title": "EmployeesController.cs",
+              "DocumentMoniker": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem.Users\\Controllers\\EmployeesController.cs",
+              "RelativeDocumentMoniker": "BankSystem.Users\\Controllers\\EmployeesController.cs",
+              "ToolTip": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem.Users\\Controllers\\EmployeesController.cs",
+              "RelativeToolTip": "BankSystem.Users\\Controllers\\EmployeesController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADAAAAAwAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-28T15:26:22.936Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "AccountsController.cs",
-              "DocumentMoniker": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem\\Controllers\\AccountsController.cs",
-              "RelativeDocumentMoniker": "BankSystem\\Controllers\\AccountsController.cs",
-              "ToolTip": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem\\Controllers\\AccountsController.cs",
-              "RelativeToolTip": "BankSystem\\Controllers\\AccountsController.cs",
-              "ViewState": "AgIAAA0AAAAAAAAAAAA1wEEAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-28T15:26:16.308Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "TransactionDto.cs",
-              "DocumentMoniker": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem\\DTOs\\TransactionDto.cs",
-              "RelativeDocumentMoniker": "BankSystem\\DTOs\\TransactionDto.cs",
-              "ToolTip": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem\\DTOs\\TransactionDto.cs",
-              "RelativeToolTip": "BankSystem\\DTOs\\TransactionDto.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACEAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-28T15:26:08.704Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "AccountDto.cs",
-              "DocumentMoniker": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem\\DTOs\\AccountDto.cs",
-              "RelativeDocumentMoniker": "BankSystem\\DTOs\\AccountDto.cs",
-              "ToolTip": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem\\DTOs\\AccountDto.cs",
-              "RelativeToolTip": "BankSystem\\DTOs\\AccountDto.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB8AAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-28T15:26:01.787Z",
+              "WhenOpened": "2026-02-28T16:59:15.041Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem\\appsettings.json",
-              "RelativeDocumentMoniker": "BankSystem\\appsettings.json",
-              "ToolTip": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem\\appsettings.json",
-              "RelativeToolTip": "BankSystem\\appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAOAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-02-28T15:25:14.779Z",
+              "Title": "UsersController.cs",
+              "DocumentMoniker": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem.Users\\Controllers\\UsersController.cs",
+              "RelativeDocumentMoniker": "BankSystem.Users\\Controllers\\UsersController.cs",
+              "ToolTip": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem.Users\\Controllers\\UsersController.cs",
+              "RelativeToolTip": "BankSystem.Users\\Controllers\\UsersController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACgAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-28T16:58:56.115Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "EmployeeService.cs",
+              "DocumentMoniker": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem.Users\\Services\\EmployeeService.cs",
+              "RelativeDocumentMoniker": "BankSystem.Users\\Services\\EmployeeService.cs",
+              "ToolTip": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem.Users\\Services\\EmployeeService.cs",
+              "RelativeToolTip": "BankSystem.Users\\Services\\EmployeeService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACkAAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-28T16:58:21.912Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "IEmployeeService.cs",
+              "DocumentMoniker": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem.Users\\Services\\IEmployeeService.cs",
+              "RelativeDocumentMoniker": "BankSystem.Users\\Services\\IEmployeeService.cs",
+              "ToolTip": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem.Users\\Services\\IEmployeeService.cs",
+              "RelativeToolTip": "BankSystem.Users\\Services\\IEmployeeService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-28T16:57:55.94Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "UserService.cs",
+              "DocumentMoniker": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem.Users\\Services\\UserService.cs",
+              "RelativeDocumentMoniker": "BankSystem.Users\\Services\\UserService.cs",
+              "ToolTip": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem.Users\\Services\\UserService.cs",
+              "RelativeToolTip": "BankSystem.Users\\Services\\UserService.cs",
+              "ViewState": "AgIAAFYAAAAAAAAAAAAIwHoAAAAuAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-28T16:57:22.687Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "IUserService.cs",
+              "DocumentMoniker": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem.Users\\Services\\IUserService.cs",
+              "RelativeDocumentMoniker": "BankSystem.Users\\Services\\IUserService.cs",
+              "ToolTip": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem.Users\\Services\\IUserService.cs",
+              "RelativeToolTip": "BankSystem.Users\\Services\\IUserService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-28T16:57:03.555Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "UsersDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem.Users\\Data\\UsersDbContext.cs",
+              "RelativeDocumentMoniker": "BankSystem.Users\\Data\\UsersDbContext.cs",
+              "ToolTip": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem.Users\\Data\\UsersDbContext.cs",
+              "RelativeToolTip": "BankSystem.Users\\Data\\UsersDbContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-28T16:56:32.853Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "EmployeeDto.cs",
+              "DocumentMoniker": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem.Users\\DTOs\\EmployeeDto.cs",
+              "RelativeDocumentMoniker": "BankSystem.Users\\DTOs\\EmployeeDto.cs",
+              "ToolTip": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem.Users\\DTOs\\EmployeeDto.cs",
+              "RelativeToolTip": "BankSystem.Users\\DTOs\\EmployeeDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-28T16:43:54.81Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "UserDto.cs",
+              "DocumentMoniker": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem.Users\\DTOs\\UserDto.cs",
+              "RelativeDocumentMoniker": "BankSystem.Users\\DTOs\\UserDto.cs",
+              "ToolTip": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem.Users\\DTOs\\UserDto.cs",
+              "RelativeToolTip": "BankSystem.Users\\DTOs\\UserDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAA5AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-28T16:43:00.578Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "Employee.cs",
+              "DocumentMoniker": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem.Users\\Models\\Employee.cs",
+              "RelativeDocumentMoniker": "BankSystem.Users\\Models\\Employee.cs",
+              "ToolTip": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem.Users\\Models\\Employee.cs",
+              "RelativeToolTip": "BankSystem.Users\\Models\\Employee.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-28T16:41:06.113Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "User.cs",
+              "DocumentMoniker": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem.Users\\Models\\User.cs",
+              "RelativeDocumentMoniker": "BankSystem.Users\\Models\\User.cs",
+              "ToolTip": "C:\\Users\\rkadl\\source\\repos\\BankSystem\\BankSystem.Users\\Models\\User.cs",
+              "RelativeToolTip": "BankSystem.Users\\Models\\User.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-28T16:40:51.715Z",
               "EditorCaption": ""
             }
           ]
