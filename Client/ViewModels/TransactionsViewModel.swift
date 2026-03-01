@@ -9,27 +9,21 @@
 import Foundation
 import Combine
 
+@MainActor
 final class TransactionsViewModel: ObservableObject {
-    @Published var transactions: [Transaction] = []
-    
-    private let db = MockDataService.shared
-    private var cancellables = Set<AnyCancellable>()
-    let account: Account
-    
-    init(account: Account) {
-        self.account = account
-        observeDB()
-        load()
-    }
-    
-    private func observeDB() {
-        db.$transactions
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in self?.load() }
-            .store(in: &cancellables)
-    }
-    
+    @Published var transactions: [TransactionDTO] = []
+    @Published var isLoading = false
+    @Published var errorMessage: String?
+
+    private let accountId: UUID
+    init(accountId: UUID) { self.accountId = accountId }
+
     func load() {
-        transactions = db.transactions(for: account.id)
+        Task {
+            isLoading = true
+            do { transactions = try await TransactionService.shared.getTransactions(accountId: accountId) }
+            catch { errorMessage = error.localizedDescription }
+            isLoading = false
+        }
     }
 }

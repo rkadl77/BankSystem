@@ -9,77 +9,65 @@
 import Foundation
 import Combine
 
+@MainActor
 final class CreditViewModel: ObservableObject {
-    @Published var credits: [Credit] = []
-    @Published var tariffs: [CreditTariff] = []
+    @Published var credits: [CreditDTO] = []
+    @Published var tariffs: [CreditTariffDTO] = []
+    @Published var isLoading = false
+    @Published var isSubmitting = false
     @Published var errorMessage: String?
     @Published var successMessage: String?
-    
-    // Take credit form
-    @Published var selectedTariff: CreditTariff?
+
+    // form
+    @Published var selectedTariff: CreditTariffDTO?
     @Published var selectedAccountId: UUID?
-    @Published var creditAmount: String = ""
-    @Published var termDays: String = "30"
-    
-    private let db = MockDataService.shared
-    private var cancellables = Set<AnyCancellable>()
+    @Published var amountText = ""
+
     private let clientId: UUID
-    
-    init(clientId: UUID) {
-        self.clientId = clientId
-        observeDB()
-        load()
-    }
-    
-    private func observeDB() {
-        db.$credits
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in self?.load() }
-            .store(in: &cancellables)
-    }
-    
+    init(clientId: UUID) { self.clientId = clientId }
+
     func load() {
-        credits = db.credits(for: clientId)
-        tariffs = db.activeTariffs()
-    }
-    
-    func takeCredit() -> Bool {
-        guard let tariff = selectedTariff,
-              let accountId = selectedAccountId,
-              let amount = Double(creditAmount),
-              let term = Int(termDays) else {
-            errorMessage = "Заполните все поля"
-            return false
-        }
-        
-        let ok = db.takeCredit(clientId: clientId, accountId: accountId,
-                               tariffId: tariff.id, amount: amount, termDays: term)
-        if ok {
-            successMessage = "Кредит оформлен!"
-            resetForm()
-        } else {
-            errorMessage = "Не удалось оформить кредит. Проверьте условия тарифа."
-        }
-        return ok
-    }
-    
-    func repayCredit(_ credit: Credit, from accountId: UUID, amount: Double) {
-        let ok = db.repayCredit(creditId: credit.id, accountId: accountId, amount: amount)
-        if ok {
-            successMessage = "Платёж внесён"
-        } else {
-            errorMessage = "Недостаточно средств или ошибка"
+        Task {
+            isLoading = true; errorMessage = nil
+            async let c = CreditService.shared.getCredits(clientId: clientId)
+            async let t = CreditService.shared.getActiveTariffs()
+            do { credits = try await c; tariffs = try await t }
+            catch { errorMessage = error.localizedDescription }
+            isLoading = false
         }
     }
-    
-    private func resetForm() {
-        selectedTariff = nil
-        selectedAccountId = nil
-        creditAmount = ""
-        termDays = "30"
+
+    @discardableResult
+    func submitTakeCredit() -> Bool {
+        guard selectedTariff != nil, selectedAccountId != nil,
+              let amount = Double(amountText), amount > 0
+        else { errorMessage = "Заполните все поля"; return false }
+
+        Task {
+            isSubmitting = true; errorMessage = nil
+            do {
+                let c = try await CreditService.shared.takeCredit(
+                    clientId: clientId, accountId: selectedAccountId!,
+                    tariffId: selectedTariff!.id, amount: amount)
+                credits.append(c)
+                selectedTariff = nil; selectedAccountId = nil; amountText = ""
+                successMessage = "Кредит \(c.formattedAmount) оформлен ✓"
+            }
+            catch NetworkError.serverError(400, let m) { errorMessage = m ?? "Ошибка оформления" }
+            catch { errorMessage = error.localizedDescription }
+            isSubmitting = false
+        }
+        return true
     }
-    
-    func tariffName(for id: UUID) -> String {
-        tariffs.first { $0.id == id }?.name ?? "Тариф удалён"
+
+    func repay(_ credit: CreditDTO, amount: Double) {
+        Task {
+            do {
+                try await CreditService.shared.repayCredit(creditId: credit.id, amount: amount)
+                load(); successMessage = "Платёж внесён ✓"
+            }
+            catch NetworkError.serverError(400, _) { errorMessage = "Недостаточно средств" }
+            catch { errorMessage = error.localizedDescription }
+        }
     }
 }

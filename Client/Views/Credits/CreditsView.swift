@@ -8,98 +8,75 @@
 
 import SwiftUI
 
-// MARK: — Credits List
-
 struct CreditsView: View {
     @ObservedObject var creditVM: CreditViewModel
     @ObservedObject var accountsVM: AccountsViewModel
-    let clientId: UUID
-    
-    @State private var showTakeCredit = false
-    
+    @State private var showTake = false
+
     var body: some View {
         NavigationStack {
             List {
-                if creditVM.credits.isEmpty {
+                if let err = creditVM.errorMessage {
+                    Section { Label(err, systemImage: "exclamationmark.circle.fill").foregroundColor(.bankDanger) }
+                }
+                if let ok = creditVM.successMessage {
+                    Section { Label(ok, systemImage: "checkmark.circle.fill").foregroundColor(.bankSuccess) }
+                }
+                if creditVM.isLoading {
+                    Section { ProgressView("Загрузка...").frame(maxWidth: .infinity) }
+                } else if creditVM.credits.isEmpty {
                     Section {
                         VStack(spacing: 12) {
-                            Image(systemName: "banknote")
-                                .font(.system(size: 40))
-                                .foregroundColor(.secondary)
-                            Text("Нет активных кредитов")
-                                .foregroundColor(.secondary)
-                        }
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 24)
+                            Image(systemName: "banknote").font(.system(size: 44)).foregroundColor(.secondary)
+                            Text("Нет кредитов").foregroundColor(.secondary)
+                        }.frame(maxWidth: .infinity).padding(.vertical, 24)
                     }
                 } else {
-                    ForEach(creditVM.credits) { credit in
-                        NavigationLink {
-                            CreditDetailView(credit: credit,
-                                             creditVM: creditVM,
-                                             accounts: accountsVM.accounts.filter { $0.isActive })
-                        } label: {
-                            CreditRowView(credit: credit, tariffName: creditVM.tariffName(for: credit.tariffId))
+                    Section("Мои кредиты") {
+                        ForEach(creditVM.credits) { credit in
+                            NavigationLink(destination: CreditDetailView(credit: credit, creditVM: creditVM,
+                                                                          activeAccounts: accountsVM.accounts.filter { $0.isActive })) {
+                                CreditRowView(credit: credit)
+                            }
                         }
                     }
                 }
             }
             .navigationTitle("Кредиты")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Взять кредит") { showTakeCredit = true }
-                        .foregroundColor(.bankAccent)
-                }
+            .toolbar { ToolbarItem(placement: .navigationBarTrailing) { Button("Взять") { showTake = true }.foregroundColor(.bankAccent) } }
+            .sheet(isPresented: $showTake) {
+                TakeCreditView(creditVM: creditVM, activeAccounts: accountsVM.accounts.filter { $0.isActive })
             }
-            .sheet(isPresented: $showTakeCredit) {
-                TakeCreditView(creditVM: creditVM,
-                               accounts: accountsVM.accounts.filter { $0.isActive })
-            }
-            .overlay(alignment: .bottom) {
-                if let msg = creditVM.successMessage {
-                    ToastView(message: msg, isError: false).padding(.bottom, 16)
-                } else if let err = creditVM.errorMessage {
-                    ToastView(message: err, isError: true).padding(.bottom, 16)
-                }
-            }
+            .refreshable { creditVM.load() }
         }
     }
 }
 
-import SwiftUI
-
-private struct CreditRowView: View {
-    let credit: Credit
-    let tariffName: String
-    
+struct CreditRowView: View {
+    let credit: CreditDTO
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack {
-                Text(tariffName)
-                    .font(.headline)
+                Text(credit.tariffName).font(.headline)
                 Spacer()
-                Text(credit.status.rawValue)
+                Text(credit.statusLabel)
                     .font(.caption2.weight(.semibold))
                     .padding(.horizontal, 8).padding(.vertical, 3)
-                    .background(credit.status.color.opacity(0.15))
-                    .foregroundColor(credit.status.color)
-                    .cornerRadius(6)
+                    .background(credit.statusColor.opacity(0.15))
+                    .foregroundColor(credit.statusColor).cornerRadius(6)
             }
-            
             HStack {
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("Осталось").font(.caption).foregroundColor(.secondary)
+                VStack(alignment: .leading, spacing: 1) {
+                    Text("Остаток").font(.caption).foregroundColor(.secondary)
                     Text(credit.formattedRemaining).font(.subheadline.weight(.semibold))
                 }
                 Spacer()
-                VStack(alignment: .trailing, spacing: 2) {
+                VStack(alignment: .trailing, spacing: 1) {
                     Text("Ставка").font(.caption).foregroundColor(.secondary)
-                    Text("\(String(format: "%.1f", credit.interestRate))%").font(.subheadline.weight(.semibold))
+                    Text(credit.formattedRate).font(.subheadline.weight(.semibold))
                 }
             }
-            
-            ProgressView(value: credit.progressFraction)
-                .tint(.bankAccent)
+            ProgressView(value: credit.progressFraction).tint(.bankAccent)
         }
         .padding(.vertical, 4)
     }

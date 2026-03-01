@@ -8,91 +8,66 @@
 
 import SwiftUI
 
-// MARK: — Take Credit Sheet
-
 struct TakeCreditView: View {
     @ObservedObject var creditVM: CreditViewModel
-    let accounts: [Account]
+    let activeAccounts: [AccountDTO]
     @Environment(\.dismiss) var dismiss
-    
+
     var body: some View {
         NavigationStack {
             Form {
                 Section("Тариф") {
-                    if creditVM.tariffs.isEmpty {
-                        Text("Нет доступных тарифов")
-                            .foregroundColor(.secondary)
-                    } else {
+                    if creditVM.tariffs.isEmpty { Text("Нет доступных тарифов").foregroundColor(.secondary) }
+                    else {
                         Picker("Тариф", selection: $creditVM.selectedTariff) {
-                            Text("Выберите тариф").tag(CreditTariff?.none)
+                            Text("Выберите...").tag(CreditTariffDTO?.none)
                             ForEach(creditVM.tariffs) { t in
                                 VStack(alignment: .leading) {
                                     Text(t.name)
-                                    Text("\(t.formattedRate) годовых")
-                                        .font(.caption)
-                                        .foregroundColor(.secondary)
-                                }
-                                .tag(t as CreditTariff?)
+                                    Text("\(t.formattedRate) годовых").font(.caption).foregroundColor(.secondary)
+                                }.tag(t as CreditTariffDTO?)
                             }
                         }
-                        
                         if let t = creditVM.selectedTariff {
                             LabeledContent("Ставка", value: t.formattedRate)
-                            LabeledContent("Сумма от-до", value: "\(Int(t.minAmount)) — \(Int(t.maxAmount)) ₽")
-                            LabeledContent("Срок (дней)", value: "\(t.minTermDays) — \(t.maxTermDays)")
+                            if !t.description.isEmpty { Text(t.description).font(.caption).foregroundColor(.secondary) }
                         }
                     }
                 }
-                
                 Section("Счёт зачисления") {
-                    Picker("Счёт", selection: $creditVM.selectedAccountId) {
-                        Text("Выберите счёт").tag(UUID?.none)
-                        ForEach(accounts) { acc in
-                            Text("\(acc.type.rawValue) — \(acc.maskedNumber)").tag(acc.id as UUID?)
+                    if activeAccounts.isEmpty { Text("Нет активных счетов").foregroundColor(.secondary) }
+                    else {
+                        Picker("Счёт", selection: $creditVM.selectedAccountId) {
+                            Text("Выберите...").tag(UUID?.none)
+                            ForEach(activeAccounts) { a in
+                                Text("\(a.currency) — \(a.maskedNumber)").tag(a.id as UUID?)
+                            }
                         }
                     }
                 }
-                
-                Section("Параметры") {
+                Section("Сумма") {
                     HStack {
-                        Text("Сумма")
-                        Spacer()
-                        TextField("100 000", text: $creditVM.creditAmount)
-                            .keyboardType(.numberPad)
-                            .multilineTextAlignment(.trailing)
+                        TextField("Например 100000", text: $creditVM.amountText).keyboardType(.decimalPad)
                         Text("₽").foregroundColor(.secondary)
                     }
-                    HStack {
-                        Text("Срок")
-                        Spacer()
-                        TextField("30", text: $creditVM.termDays)
-                            .keyboardType(.numberPad)
-                            .multilineTextAlignment(.trailing)
-                        Text("дней").foregroundColor(.secondary)
-                    }
                 }
-                
                 if let err = creditVM.errorMessage {
-                    Section {
-                        Label(err, systemImage: "exclamationmark.circle.fill")
-                            .foregroundColor(.bankDanger)
-                    }
+                    Section { Label(err, systemImage: "exclamationmark.circle.fill").foregroundColor(.bankDanger) }
                 }
-                
                 Section {
-                    Button("Оформить кредит") {
-                        if creditVM.takeCredit() { dismiss() }
+                    Button {
+                        if creditVM.submitTakeCredit() { dismiss() }
+                    } label: {
+                        if creditVM.isSubmitting { ProgressView().frame(maxWidth: .infinity) }
+                        else { Text("Оформить кредит").fontWeight(.semibold).frame(maxWidth: .infinity) }
                     }
                     .foregroundColor(.bankAccent)
-                    .fontWeight(.semibold)
+                    .disabled(creditVM.isSubmitting || creditVM.selectedTariff == nil
+                              || creditVM.selectedAccountId == nil || Double(creditVM.amountText) == nil)
                 }
             }
-            .navigationTitle("Кредитная заявка")
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Отмена") { dismiss() }
-                }
-            }
+            .navigationTitle("Новый кредит")
+            .toolbar { ToolbarItem(placement: .cancellationAction) { Button("Отмена") { dismiss() } } }
         }
     }
 }

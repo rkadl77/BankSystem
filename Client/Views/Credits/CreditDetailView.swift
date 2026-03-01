@@ -8,48 +8,63 @@
 import SwiftUI
 
 struct CreditDetailView: View {
-    let credit: Credit
+    let credit: CreditDTO
     @ObservedObject var creditVM: CreditViewModel
-    let accounts: [Account]
-    
+    let activeAccounts: [AccountDTO]
     @State private var selectedAccountId: UUID?
-    @State private var paymentAmount: String = ""
-    
+    @State private var payText = ""
+
     var body: some View {
         List {
             Section("Информация") {
-                LabeledContent("Сумма кредита", value: credit.formattedAmount)
+                LabeledContent("Тариф",   value: credit.tariffName)
+                LabeledContent("Сумма",   value: credit.formattedAmount)
                 LabeledContent("Остаток", value: credit.formattedRemaining)
-                LabeledContent("Ставка", value: "\(String(format: "%.1f", credit.interestRate))%")
-                LabeledContent("Дата выдачи", value: credit.startDate.shortFormatted)
-                LabeledContent("Дата закрытия", value: credit.endDate.shortFormatted)
-                LabeledContent("Ежедневный платёж", value: String(format: "%.2f ₽", credit.dailyPayment))
+                LabeledContent("Ставка",  value: credit.formattedRate)
+                LabeledContent("Выдан",   value: credit.startDate.shortFormatted)
+                if let e = credit.endDate { LabeledContent("Закрыт", value: e.shortFormatted) }
+                HStack {
+                    Text("Статус"); Spacer()
+                    Text(credit.statusLabel).foregroundColor(credit.statusColor).fontWeight(.semibold)
+                }
             }
-            
-            if credit.status == .active {
-                Section("Погашение") {
-                    Picker("Счёт списания", selection: $selectedAccountId) {
-                        Text("Выберите счёт").tag(UUID?.none)
-                        ForEach(accounts) { acc in
-                            Text("\(acc.type.rawValue) — \(acc.formattedBalance)").tag(acc.id as UUID?)
+            Section {
+                ProgressView(value: credit.progressFraction).tint(.bankAccent)
+                Text("\(Int(credit.progressFraction * 100))% погашено")
+                    .font(.caption).foregroundColor(.secondary)
+            }
+
+            if credit.status.lowercased() == "active" {
+                Section("Внести платёж") {
+                    if activeAccounts.isEmpty {
+                        Text("Нет активных счетов").foregroundColor(.secondary)
+                    } else {
+                        Picker("Счёт", selection: $selectedAccountId) {
+                            Text("Счёт...").tag(UUID?.none)
+                            ForEach(activeAccounts) { a in
+                                Text("\(a.currency) — \(a.formattedBalance)").tag(a.id as UUID?)
+                            }
                         }
-                    }
-                    HStack {
-                        TextField("Сумма погашения", text: $paymentAmount)
-                            .keyboardType(.decimalPad)
-                        Button("Оплатить") {
-                            guard let accId = selectedAccountId,
-                                  let amount = Double(paymentAmount) else { return }
-                            creditVM.repayCredit(credit, from: accId, amount: amount)
-                            paymentAmount = ""
+                        HStack {
+                            TextField("Сумма платежа", text: $payText).keyboardType(.decimalPad)
+                            Button("Оплатить") {
+                                guard selectedAccountId != nil, let amt = Double(payText), amt > 0 else { return }
+                                creditVM.repay(credit, amount: amt); payText = ""
+                            }
+                            .foregroundColor(.bankAccent).fontWeight(.semibold)
+                            .disabled(selectedAccountId == nil || Double(payText) == nil)
                         }
-                        .foregroundColor(.bankAccent)
-                        .fontWeight(.semibold)
                     }
                 }
             }
+            if let err = creditVM.errorMessage {
+                Section { Label(err, systemImage: "exclamationmark.circle.fill").foregroundColor(.bankDanger) }
+            }
+            if let ok = creditVM.successMessage {
+                Section { Label(ok, systemImage: "checkmark.circle.fill").foregroundColor(.bankSuccess) }
+            }
         }
         .navigationTitle("Кредит")
-        .onAppear { selectedAccountId = accounts.first?.id }
+        .onAppear { selectedAccountId = activeAccounts.first?.id }
     }
 }

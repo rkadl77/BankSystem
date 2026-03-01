@@ -9,38 +9,30 @@
 import Foundation
 import Combine
 
+@MainActor
 final class AuthViewModel: ObservableObject {
-    @Published var email: String = ""
+    @Published var email = ""
+    @Published var isLoading = false
     @Published var errorMessage: String?
-    @Published var currentUser: User?
-    @Published var isLoading: Bool = false
-    
-    private let db = MockDataService.shared
-    
+    @Published var currentUser: UserDTO?
+
     var isLoggedIn: Bool { currentUser != nil }
-    
+
     func login() {
-        guard !email.isEmpty else {
-            errorMessage = "Введите email"
-            return
-        }
-        isLoading = true
-        errorMessage = nil
-        
-        // Simulate network delay
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) { [weak self] in
-            guard let self else { return }
-            self.isLoading = false
-            if let user = self.db.login(email: self.email), user.role == .client {
-                self.currentUser = user
-            } else {
-                self.errorMessage = "Клиент не найден или заблокирован"
-            }
+        let trimmed = email.trimmingCharacters(in: .whitespaces)
+        guard !trimmed.isEmpty else { errorMessage = "Введите email"; return }
+        Task {
+            isLoading = true; errorMessage = nil
+            do {
+                let user = try await UserService.shared.getUserByEmail(trimmed)
+                guard user.isActive  else { errorMessage = "Аккаунт заблокирован"; isLoading = false; return }
+                guard user.role == "client" else { errorMessage = "Нет доступа как клиент"; isLoading = false; return }
+                currentUser = user
+            } catch NetworkError.serverError(404, _) { errorMessage = "Пользователь не найден" }
+            catch { errorMessage = error.localizedDescription }
+            isLoading = false
         }
     }
-    
-    func logout() {
-        currentUser = nil
-        email = ""
-    }
+
+    func logout() { currentUser = nil; email = "" }
 }

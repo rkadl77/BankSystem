@@ -9,69 +9,70 @@
 import Foundation
 import Combine
 
+@MainActor
 final class AccountsViewModel: ObservableObject {
-    @Published var accounts: [Account] = []
+    @Published var accounts: [AccountDTO] = []
     @Published var isLoading = false
     @Published var errorMessage: String?
-    @Published var showSuccess = false
-    @Published var successMessage = ""
-    
-    private let db = MockDataService.shared
-    private var cancellables = Set<AnyCancellable>()
-    private let userId: UUID
-    
-    init(userId: UUID) {
-        self.userId = userId
-        observeDB()
-        loadAccounts()
-    }
-    
-    private func observeDB() {
-        db.$accounts
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in self?.loadAccounts() }
-            .store(in: &cancellables)
-    }
-    
-    func loadAccounts() {
-        accounts = db.accounts(for: userId)
-    }
-    
-    func openAccount(type: AccountType) {
-        db.openAccount(for: userId, type: type)
-        showSuccessMessage("Счёт открыт ✓")
-    }
-    
-    func closeAccount(_ account: Account) {
-        guard account.balance == 0 else {
-            errorMessage = "Нельзя закрыть счёт с ненулевым балансом"
-            return
-        }
-        db.closeAccount(id: account.id)
-        showSuccessMessage("Счёт закрыт")
-    }
-    
-    func deposit(to account: Account, amount: Double) {
-        guard amount > 0 else { errorMessage = "Сумма должна быть больше 0"; return }
-        db.deposit(accountId: account.id, amount: amount)
-        showSuccessMessage("Пополнено на \(String(format: "%.2f", amount)) ₽")
-    }
-    
-    func withdraw(from account: Account, amount: Double) {
-        guard amount > 0 else { errorMessage = "Сумма должна быть больше 0"; return }
-        let ok = db.withdraw(accountId: account.id, amount: amount)
-        if ok {
-            showSuccessMessage("Снято \(String(format: "%.2f", amount)) ₽")
-        } else {
-            errorMessage = "Недостаточно средств"
+    @Published var successMessage: String?
+
+    let userId: UUID
+    init(userId: UUID) { self.userId = userId }
+
+    func load() {
+        Task {
+            isLoading = true; errorMessage = nil
+            do { accounts = try await AccountService.shared.getAccounts(clientId: userId) }
+            catch { errorMessage = error.localizedDescription }
+            isLoading = false
         }
     }
-    
-    private func showSuccessMessage(_ msg: String) {
+
+    func openAccount(currency: String) {
+        Task {
+            do {
+                let acc = try await AccountService.shared.createAccount(clientId: userId, currency: currency)
+                accounts.append(acc)
+                flash("Счёт \(currency) открыт ✓")
+            } catch { errorMessage = error.localizedDescription }
+        }
+    }
+
+    func closeAccount(_ account: AccountDTO) {
+        Task {
+            do {
+                try await AccountService.shared.closeAccount(id: account.id)
+                load(); flash("Счёт закрыт")
+            } catch { errorMessage = error.localizedDescription }
+        }
+    }
+
+    func deposit(to account: AccountDTO, amount: Double) {
+        Task {
+            do {
+                try await TransactionService.shared.deposit(accountId: account.id, amount: amount,
+                                                             currency: account.currency,
+                                                             description: "Пополнение счёта")
+                load(); flash("Пополнено \(String(format: "%.2f", amount)) \(account.currencySymbol)")
+            } catch { errorMessage = error.localizedDescription }
+        }
+    }
+
+    func withdraw(from account: AccountDTO, amount: Double) {
+        Task {
+            do {
+                try await TransactionService.shared.withdraw(accountId: account.id, amount: amount,
+                                                              currency: account.currency,
+                                                              description: "Снятие наличных")
+                load(); flash("Снято \(String(format: "%.2f", amount)) \(account.currencySymbol)")
+            }
+            catch NetworkError.serverError(400, _) { errorMessage = "Недостаточно средств" }
+            catch { errorMessage = error.localizedDescription }
+        }
+    }
+
+    private func flash(_ msg: String) {
         successMessage = msg
-        showSuccess = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
-            self?.showSuccess = false
-        }
+        Task { try? await Task.sleep(nanoseconds: 2_500_000_000); successMessage = nil }
     }
 }

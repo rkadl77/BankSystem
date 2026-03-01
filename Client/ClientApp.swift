@@ -10,17 +10,16 @@ import SwiftUI
 @main
 struct ClientApp: App {
     @StateObject private var authVM = AuthViewModel()
-    
     var body: some Scene {
         WindowGroup {
-            if authVM.isLoggedIn, let user = authVM.currentUser {
-                DashboardView(authVM: authVM, user: user)
-                    .transition(.asymmetric(insertion: .move(edge: .trailing),
-                                            removal: .move(edge: .leading)))
-            } else {
-                LoginView(vm: authVM)
-                    .transition(.opacity)
+            Group {
+                if authVM.isLoggedIn, let user = authVM.currentUser {
+                    DashboardView(authVM: authVM, user: user)
+                } else {
+                    LoginView(vm: authVM)
+                }
             }
+            .animation(.easeInOut(duration: 0.3), value: authVM.isLoggedIn)
         }
     }
 }
