@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using BankSystem.Users.DTOs;
 using BankSystem.Users.Services;
+using BankSystem.Users.Clients;
 
 namespace BankSystem.Users.Controllers
 {
@@ -9,10 +10,17 @@ namespace BankSystem.Users.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly CoreServiceClient _coreClient;
+        private readonly CreditServiceClient _creditClient;
 
-        public UsersController(IUserService userService)
+        public UsersController(
+            IUserService userService,
+            CoreServiceClient coreClient,
+            CreditServiceClient creditClient)
         {
             _userService = userService;
+            _coreClient = coreClient;
+            _creditClient = creditClient;
         }
 
         [HttpGet]
@@ -45,6 +53,26 @@ namespace BankSystem.Users.Controllers
         {
             var exists = await _userService.UserExistsAsync(id);
             return Ok(exists);
+        }
+
+        [HttpGet("{id}/details")]
+        public async Task<ActionResult<ClientDetailsDto>> GetClientDetails(Guid id)
+        {
+            var user = await _userService.GetUserByIdAsync(id);
+            if (user == null)
+                return NotFound();
+
+            var accounts = await _coreClient.GetAccountsByClientIdAsync(id);
+            var credits = await _creditClient.GetCreditsByClientIdAsync(id);
+
+            var details = new ClientDetailsDto
+            {
+                User = user,
+                Accounts = accounts ?? new List<AccountDto>(),
+                Credits = credits ?? new List<CreditDto>()
+            };
+
+            return Ok(details);
         }
 
         [HttpPost]

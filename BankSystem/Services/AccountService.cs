@@ -1,21 +1,24 @@
-﻿using System;
+﻿using BankSystem.Clients;
+using BankSystem.Data;
+using BankSystem.DTOs;
+using BankSystem.Models;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using BankSystem.Data;
-using BankSystem.Models;
-using BankSystem.DTOs;
 
 namespace BankSystem.Services
 {
     public class AccountService : IAccountService
     {
         private readonly BankSystemContext _context;
+        private readonly UserServiceClient _userClient;
 
-        public AccountService(BankSystemContext context)
+        public AccountService(BankSystemContext context, UserServiceClient userClient)
         {
             _context = context;
+            _userClient = userClient;
         }
 
         public async Task<AccountDto> GetAccountByIdAsync(Guid id)
@@ -28,6 +31,7 @@ namespace BankSystem.Services
                 Id = account.Id,
                 AccountNumber = account.AccountNumber,
                 Balance = account.Balance,
+                Currency = account.Currency,
                 CreatedAt = account.CreatedAt,
                 IsActive = account.IsActive
             };
@@ -44,6 +48,7 @@ namespace BankSystem.Services
                 Id = a.Id,
                 AccountNumber = a.AccountNumber,
                 Balance = a.Balance,
+                Currency = a.Currency,
                 CreatedAt = a.CreatedAt,
                 IsActive = a.IsActive
             });
@@ -53,6 +58,10 @@ namespace BankSystem.Services
         {
             if (string.IsNullOrEmpty(request.Currency))
                 throw new InvalidOperationException("Currency is required");
+
+            var userExists = await _userClient.UserExistsAsync(request.ClientId);
+            if (!userExists)
+                throw new InvalidOperationException($"Client with id {request.ClientId} does not exist");
 
             var account = new Account
             {
@@ -86,6 +95,7 @@ namespace BankSystem.Services
                 return false;
 
             account.IsActive = false;
+            account.ClosedAt = DateTime.UtcNow;
             await _context.SaveChangesAsync();
             return true;
         }

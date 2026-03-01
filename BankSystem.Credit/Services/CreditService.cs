@@ -1,21 +1,24 @@
-﻿using System;
+﻿using BankSystem.Credit.Clients;
+using BankSystem.Credit.Data;
+using BankSystem.Credit.DTOs;
+using BankSystem.Credit.Models;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using BankSystem.Credit.Data;
-using BankSystem.Credit.Models;
-using BankSystem.Credit.DTOs;
 
 namespace BankSystem.Credit.Services
 {
     public class CreditService : ICreditService
     {
         private readonly CreditDbContext _context;
+        private readonly CoreServiceClient _coreClient;
 
-        public CreditService(CreditDbContext context)
+        public CreditService(CreditDbContext context, CoreServiceClient coreClient)
         {
             _context = context;
+            _coreClient = coreClient;
         }
 
         public async Task<IEnumerable<CreditDto>> GetCreditsByClientIdAsync(Guid clientId)
@@ -80,7 +83,14 @@ namespace BankSystem.Credit.Services
             if (tariff == null)
                 throw new InvalidOperationException("Tariff not found");
 
-            var credit = new Models.Credit 
+            var account = await _coreClient.GetAccountAsync(request.AccountId);
+            if (account == null)
+                throw new InvalidOperationException("Account not found in Core service");
+
+            if (!account.IsActive)
+                throw new InvalidOperationException("Account is not active");
+
+            var credit = new Models.Credit
             {
                 Id = Guid.NewGuid(),
                 ClientId = request.ClientId,
@@ -119,6 +129,22 @@ namespace BankSystem.Credit.Services
             if (request.Amount <= 0) return false;
             if (request.Amount > credit.RemainingAmount) return false;
 
+            var accountCurrency = await _coreClient.GetAccountCurrencyAsync(credit.AccountId);
+            if (string.IsNullOrEmpty(accountCurrency))
+            {
+                return false;
+            }
+
+            var withdrawSuccess = await _coreClient.WithdrawFromAccountAsync(
+                credit.AccountId,
+                request.Amount,
+                accountCurrency,
+                $"Credit repayment for credit {credit.Id}"
+            );
+
+            if (!withdrawSuccess)
+                return false;
+
             credit.RemainingAmount -= request.Amount;
 
             if (credit.RemainingAmount == 0)
@@ -133,7 +159,8 @@ namespace BankSystem.Credit.Services
                 CreditId = credit.Id,
                 Amount = request.Amount,
                 PaymentDate = DateTime.UtcNow,
-                Status = "completed"
+                Status = "completed",
+                TransactionId = "pending"
             };
 
             _context.CreditPayments.Add(payment);
