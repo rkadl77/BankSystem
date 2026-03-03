@@ -1,15 +1,14 @@
 //
-//  ClientsListView.swift
+//  EmployeesView.swift
 //  Employee
 //
-//  Created by Gleb Korotkov on 28.03.2026.
+//  Created by Gleb Korotkov on 04.03.2026.
 //
-
 
 import SwiftUI
 
-struct ClientsListView: View {
-    @ObservedObject var vm: ClientsViewModel
+struct EmployeesView: View {
+    @ObservedObject var vm: EmployeesViewModel
     @State private var showCreate = false
 
     var body: some View {
@@ -25,25 +24,24 @@ struct ClientsListView: View {
                     Section { ProgressView("Загрузка...").frame(maxWidth: .infinity) }
                 }
 
-                Section("Клиенты (\(vm.filtered.count))") {
-                    if vm.filtered.isEmpty && !vm.isLoading {
-                        Text("Нет клиентов").foregroundColor(.secondary)
+                Section("Сотрудники (\(vm.employees.count))") {
+                    if vm.employees.isEmpty && !vm.isLoading {
+                        Text("Нет сотрудников").foregroundColor(.secondary)
                     }
-                    ForEach(vm.filtered) { client in
-                        NavigationLink(destination: ClientDetailView(client: client, clientsVM: vm)) {
-                            ClientRowView(client: client)
+                    ForEach(vm.employees) { emp in
+                        NavigationLink(destination: EmployeeDetailView(employee: emp, vm: vm)) {
+                            EmployeeRowView(employee: emp)
                         }
                     }
                 }
             }
-            .navigationTitle("Клиенты")
-            .searchable(text: $vm.searchText, prompt: "Имя, email или телефон")
+            .navigationTitle("Сотрудники")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button { showCreate = true } label: { Image(systemName: "person.badge.plus") }
                 }
             }
-            .sheet(isPresented: $showCreate) { CreateClientSheet(vm: vm) }
+            .sheet(isPresented: $showCreate) { CreateEmployeeSheet(vm: vm) }
             .refreshable { vm.load() }
         }
     }

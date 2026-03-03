@@ -1,140 +1,104 @@
 //
-//  ClientDetailView.swift
-//  Client
+//  File.swift
+//  Employee
 //
-//  Created by Gleb Korotkov on 27.02.2026.
+//  Created by Gleb Korotkov on 28.03.2026.
 //
 
 
 import SwiftUI
 
-// MARK: — Client Detail
-
 struct ClientDetailView: View {
-    let client: User
-    @ObservedObject var clientsVM: AllClientsViewModel
-    
-    private let db = MockDataService.shared
-    
-    var accounts: [Account] { db.accounts(for: client.id) }
-    var credits: [Credit]   { db.credits(for: client.id) }
-    
+    let client: UserDTO
+    @ObservedObject var clientsVM: ClientsViewModel
+    @StateObject private var detailVM = ClientDetailViewModel()
+    @State private var showBlockConfirm = false
+
     var body: some View {
         List {
-            Section("Информация") {
-                LabeledContent("ФИО", value: client.fullName)
-                LabeledContent("Email", value: client.email)
-                LabeledContent("Телефон", value: client.phone)
-                HStack {
-                    Text("Статус")
-                    Spacer()
-                    Text(client.status.label)
-                        .foregroundColor(client.status.color)
-                        .fontWeight(.semibold)
+            Section {
+                HStack(spacing: 16) {
+                    ZStack {
+                        Circle()
+                            .fill(client.isActive ? Color.bankAccent.opacity(0.15) : Color.secondary.opacity(0.1))
+                            .frame(width: 60, height: 60)
+                        Text(client.initials).font(.title2.bold())
+                            .foregroundColor(client.isActive ? .bankAccent : .secondary)
+                    }
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(client.fullName).font(.headline)
+                        HStack {
+                            Circle()
+                                .fill(client.isActive ? Color.bankSuccess : Color.bankDanger)
+                                .frame(width: 8, height: 8)
+                            Text(client.isActive ? "Активен" : "Заблокирован")
+                                .font(.caption)
+                                .foregroundColor(client.isActive ? .bankSuccess : .bankDanger)
+                        }
+                    }
                 }
-                LabeledContent("Дата регистрации", value: client.createdAt.shortFormatted)
+                .padding(.vertical, 4)
             }
-            
-            Section("Счета (\(accounts.count))") {
-                if accounts.isEmpty {
-                    Text("Нет счетов").foregroundColor(.secondary)
-                } else {
-                    ForEach(accounts) { acc in
-                        NavigationLink {
-                            EmployeeAccountDetailView(account: acc)
-                        } label: {
-                            AccountRowView(account: acc)
+
+            Section("Контакты") {
+                LabeledContent("Email",    value: client.email)
+                LabeledContent("Телефон",  value: client.phone)
+                LabeledContent("С нами с", value: client.createdAt.shortFormatted)
+            }
+
+            if detailVM.isLoading {
+                Section { ProgressView("Загрузка...").frame(maxWidth: .infinity) }
+            } else {
+                Section("Счета (\(detailVM.accounts.count))") {
+                    if detailVM.accounts.isEmpty {
+                        Text("Нет счетов").foregroundColor(.secondary)
+                    } else {
+                        ForEach(detailVM.accounts) { acc in
+                            NavigationLink(destination: AccountTransactionsView(account: acc)) {
+                                EmployeeAccountRowView(account: acc)
+                            }
+                        }
+                    }
+                }
+
+                Section("Кредиты (\(detailVM.credits.count))") {
+                    if detailVM.credits.isEmpty {
+                        Text("Нет кредитов").foregroundColor(.secondary)
+                    } else {
+                        ForEach(detailVM.credits) { credit in
+                            EmployeeCreditRowView(credit: credit)
                         }
                     }
                 }
             }
-            
-            Section("Кредиты (\(credits.count))") {
-                if credits.isEmpty {
-                    Text("Нет кредитов").foregroundColor(.secondary)
-                } else {
-                    ForEach(credits) { credit in
-                        EmployeeCreditRowView(credit: credit)
-                    }
-                }
+
+            if let err = detailVM.errorMessage {
+                Section { Label(err, systemImage: "exclamationmark.circle.fill").foregroundColor(.bankDanger) }
             }
-            
-            Section {
-                Button(client.isBlocked ? "Разблокировать" : "Заблокировать",
-                       role: client.isBlocked ? nil : .destructive) {
-                    clientsVM.toggleBlock(client)
+
+            Section("Действия") {
+                Button(client.isActive ? "Заблокировать клиента" : "Разблокировать клиента",
+                       role: client.isActive ? .destructive : .none) {
+                    showBlockConfirm = true
                 }
+                .foregroundColor(client.isActive ? .bankDanger : .bankSuccess)
             }
         }
-        .navigationTitle(client.fullName)
+        .navigationTitle(client.firstName)
         .navigationBarTitleDisplayMode(.inline)
-    }
-}
-
-
-private struct EmployeeCreditRowView: View {
-    let credit: Credit
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            HStack {
-                Text("Кредит").font(.subheadline.weight(.medium))
-                Spacer()
-                Text(credit.status.rawValue)
-                    .font(.caption2.weight(.semibold))
-                    .foregroundColor(credit.status.color)
+        .onAppear { detailVM.load(clientId: client.id) }
+        .refreshable { detailVM.load(clientId: client.id) }
+        .alert(client.isActive ? "Заблокировать клиента?" : "Разблокировать?",
+               isPresented: $showBlockConfirm) {
+            Button(client.isActive ? "Заблокировать" : "Разблокировать",
+                   role: client.isActive ? .destructive : .none) {
+                clientsVM.toggleBlock(client)
             }
-            HStack {
-                Text("Выдано: \(credit.formattedAmount)")
-                    .font(.caption).foregroundColor(.secondary)
-                Spacer()
-                Text("Остаток: \(credit.formattedRemaining)")
-                    .font(.caption).foregroundColor(.secondary)
-            }
-            HStack {
-                Text("Ставка: \(String(format: "%.1f%%", credit.interestRate))")
-                    .font(.caption2).foregroundColor(.secondary)
-                Spacer()
-                Text("\(credit.startDate.shortFormatted) → \(credit.endDate.shortFormatted)")
-                    .font(.caption2).foregroundColor(.secondary)
-            }
+            Button("Отмена", role: .cancel) {}
+        } message: {
+            Text(client.isActive
+                 ? "Клиент потеряет доступ к приложению"
+                 : "Клиент снова сможет войти в приложение")
         }
-        .padding(.vertical, 2)
-    }
-}
-
-struct AccountRowView: View {
-    let account: Account
-    
-    var body: some View {
-        HStack(spacing: 14) {
-            ZStack {
-                RoundedRectangle(cornerRadius: 10)
-                    .fill(account.isActive ? Color.bankPrimary : Color.secondary.opacity(0.2))
-                    .frame(width: 46, height: 46)
-                Image(systemName: account.isActive ? "creditcard.fill" : "creditcard")
-                    .foregroundColor(account.isActive ? .white : .secondary)
-                    .font(.system(size: 20))
-            }
-            
-            VStack(alignment: .leading, spacing: 2) {
-                Text(account.type.rawValue)
-                    .font(.headline)
-                Text(account.maskedNumber)
-                    .font(.caption.monospaced())
-                    .foregroundColor(.secondary)
-            }
-            
-            Spacer()
-            
-            VStack(alignment: .trailing, spacing: 2) {
-                Text(account.formattedBalance)
-                    .font(.subheadline.weight(.semibold))
-                Text(account.status.rawValue)
-                    .font(.caption2)
-                    .foregroundColor(account.status.color)
-            }
-        }
-        .padding(.vertical, 4)
     }
 }

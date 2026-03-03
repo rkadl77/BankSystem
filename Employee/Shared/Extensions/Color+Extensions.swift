@@ -23,60 +23,14 @@ extension Color {
     static let bankBackground = Color(UIColor.systemGroupedBackground)
 }
 
-extension TransactionType {
-    var color: Color {
-        switch self {
-        case .deposit, .creditIssue: return .bankSuccess
-        case .withdrawal, .creditPayment: return .bankDanger
-        case .transfer: return .bankAccent
-        }
-    }
-}
-
-extension CreditStatus {
-    var color: Color {
-        switch self {
-        case .active: return .bankSuccess
-        case .closed: return .secondary
-        case .overdue: return .bankDanger
-        }
-    }
-}
-
-extension AccountStatus {
-    var color: Color {
-        switch self {
-        case .active: return .bankSuccess
-        case .closed: return .secondary
-        }
-    }
-}
-
-extension UserStatus {
-    var color: Color {
-        switch self {
-        case .active: return .bankSuccess
-        case .blocked: return .bankDanger
-        }
-    }
-    
-    var label: String {
-        switch self {
-        case .active: return "Активен"
-        case .blocked: return "Заблокирован"
-        }
-    }
-}
-
-// MARK: — Date Formatter helpers
 
 extension Date {
     var shortFormatted: String {
         let f = DateFormatter()
         f.dateFormat = "dd.MM.yyyy"
+        f.locale = Locale(identifier: "ru_RU")
         return f.string(from: self)
     }
-    
     var longFormatted: String {
         let f = DateFormatter()
         f.dateFormat = "dd MMM yyyy, HH:mm"
@@ -84,3 +38,5 @@ extension Date {
         return f.string(from: self)
     }
 }
+
+
