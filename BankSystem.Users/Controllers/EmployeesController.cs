@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using BankSystem.Users.DTOs;
 using BankSystem.Users.Services;
 
 namespace BankSystem.Users.Controllers
 {
+    [Authorize(Roles = "admin,employee")]
     [ApiController]
     [Route("api/[controller]")]
     public class EmployeesController : ControllerBase
@@ -38,6 +40,7 @@ namespace BankSystem.Users.Controllers
             return Ok(employees);
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<ActionResult<EmployeeDto>> CreateEmployee(CreateEmployeeRequest request)
         {
@@ -52,6 +55,7 @@ namespace BankSystem.Users.Controllers
             }
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost("{id}/fire")]
         public async Task<IActionResult> FireEmployee(Guid id)
         {

@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using BankSystem.Credit.DTOs;
 using BankSystem.Credit.Services;
 
 namespace BankSystem.Credit.Controllers
 {
+    [Authorize(Roles = "admin,employee")]
     [ApiController]
     [Route("api/[controller]")]
     public class CreditTariffsController : ControllerBase

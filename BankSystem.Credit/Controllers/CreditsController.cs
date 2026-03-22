@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using BankSystem.Credit.DTOs;
 using BankSystem.Credit.Services;
 
 namespace BankSystem.Credit.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class CreditsController : ControllerBase
@@ -15,6 +17,7 @@ namespace BankSystem.Credit.Controllers
             _creditService = creditService;
         }
 
+        [Authorize(Roles = "admin,employee")]
         [HttpGet("client/{clientId}")]
         public async Task<ActionResult<IEnumerable<CreditDto>>> GetCreditsByClientId(Guid clientId)
         {
@@ -22,6 +25,7 @@ namespace BankSystem.Credit.Controllers
             return Ok(credits);
         }
 
+        [Authorize(Roles = "admin,employee")]
         [HttpGet("active")]
         public async Task<ActionResult<IEnumerable<CreditDto>>> GetActiveCredits()
         {
@@ -29,6 +33,7 @@ namespace BankSystem.Credit.Controllers
             return Ok(credits);
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<CreditDetailsDto>> GetCreditById(Guid id)
         {
@@ -38,6 +43,7 @@ namespace BankSystem.Credit.Controllers
             return Ok(credit);
         }
 
+        [Authorize(Roles = "admin,employee")]
         [HttpGet("client/{clientId}/total-debt")]
         public async Task<ActionResult<decimal>> GetTotalDebtByClientId(Guid clientId)
         {
@@ -45,6 +51,7 @@ namespace BankSystem.Credit.Controllers
             return Ok(debt);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<CreditDto>> CreateCredit(CreateCreditRequest request)
         {
@@ -59,6 +66,7 @@ namespace BankSystem.Credit.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost("repay")]
         public async Task<IActionResult> RepayCredit(RepayCreditRequest request)
         {

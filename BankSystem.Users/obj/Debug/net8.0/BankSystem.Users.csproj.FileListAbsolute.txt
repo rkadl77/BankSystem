@@ -104,3 +104,11 @@ C:\Users\rkadl\source\repos\BankSystem\BankSystem.Users\obj\Debug\net8.0\refint\
 C:\Users\rkadl\source\repos\BankSystem\BankSystem.Users\obj\Debug\net8.0\BankSystem.Users.pdb
 C:\Users\rkadl\source\repos\BankSystem\BankSystem.Users\obj\Debug\net8.0\BankSystem.Users.genruntimeconfig.cache
 C:\Users\rkadl\source\repos\BankSystem\BankSystem.Users\obj\Debug\net8.0\ref\BankSystem.Users.dll
+C:\Users\rkadl\source\repos\BankSystem\BankSystem.Users\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\rkadl\source\repos\BankSystem\BankSystem.Users\bin\Debug\net8.0\Microsoft.IdentityModel.Abstractions.dll
+C:\Users\rkadl\source\repos\BankSystem\BankSystem.Users\bin\Debug\net8.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\rkadl\source\repos\BankSystem\BankSystem.Users\bin\Debug\net8.0\Microsoft.IdentityModel.Logging.dll
+C:\Users\rkadl\source\repos\BankSystem\BankSystem.Users\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.dll
+C:\Users\rkadl\source\repos\BankSystem\BankSystem.Users\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\rkadl\source\repos\BankSystem\BankSystem.Users\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
+C:\Users\rkadl\source\repos\BankSystem\BankSystem.Users\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll
