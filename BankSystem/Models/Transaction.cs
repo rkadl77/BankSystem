@@ -13,5 +13,8 @@ namespace BankSystem.Models
         public DateTime Timestamp { get; set; }
         public string? Description { get; set; }
         public Guid? RelatedTransactionId { get; set; }
+        public decimal? ConversionRate { get; set; }
+        public string? OriginalCurrency { get; set; }
+        public string? TargetCurrency { get; set; }
     }
 }

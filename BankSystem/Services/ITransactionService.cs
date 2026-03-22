@@ -11,5 +11,6 @@ namespace BankSystem.Services
         Task<TransactionDto> DepositAsync(CreateTransactionRequest request);
         Task<TransactionDto> WithdrawAsync(CreateTransactionRequest request);
         Task<bool> TransferAsync(TransferRequest request);
+        Task<IEnumerable<TransactionDto>> TransferBetweenAccountsAsync(TransferBetweenAccountsRequest request);
     }
 }
