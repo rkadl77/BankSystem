@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using BankSystem.DTOs;
 using BankSystem.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BankSystem.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class TransactionsController : ControllerBase

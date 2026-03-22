@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using BankSystem.DTOs;
 using BankSystem.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BankSystem.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class AccountsController : ControllerBase
@@ -36,8 +38,15 @@ namespace BankSystem.Controllers
         [HttpPost]
         public async Task<ActionResult<AccountDto>> CreateAccount(CreateAccountRequest request)
         {
-            var account = await _accountService.CreateAccountAsync(request);
-            return CreatedAtAction(nameof(GetAccountById), new { id = account.Id }, account);
+            try
+            {
+                var account = await _accountService.CreateAccountAsync(request);
+                return CreatedAtAction(nameof(GetAccountById), new { id = account.Id }, account);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPut("{id}/close")]

@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36511.14 d17.14
+VisualStudioVersion = 17.14.36511.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankSystem", "BankSystem\BankSystem.csproj", "{85297E3F-5F06-4DFE-8CEF-C67835999B60}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankSystem.Users", "BankSystem.Users\BankSystem.Users.csproj", "{DCE33CAC-6FB3-4A7B-9157-7A26F6BDEE98}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankSystem.Credit", "BankSystem.Credit\BankSystem.Credit.csproj", "{55285BAF-F582-447D-B675-4AAD33948F22}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankSystem.Auth", "BankSystem.Auth\BankSystem.Auth.csproj", "{4DE62907-EA75-4B3F-A4FB-0486AE925C53}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{55285BAF-F582-447D-B675-4AAD33948F22}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{55285BAF-F582-447D-B675-4AAD33948F22}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{55285BAF-F582-447D-B675-4AAD33948F22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DE62907-EA75-4B3F-A4FB-0486AE925C53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DE62907-EA75-4B3F-A4FB-0486AE925C53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DE62907-EA75-4B3F-A4FB-0486AE925C53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DE62907-EA75-4B3F-A4FB-0486AE925C53}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using BankSystem.Users.DTOs;
 using BankSystem.Users.Services;
 using BankSystem.Users.Clients;
+using System.Text;
+using System.IO;
 
 namespace BankSystem.Users.Controllers
 {
@@ -23,6 +26,7 @@ namespace BankSystem.Users.Controllers
             _creditClient = creditClient;
         }
 
+        [Authorize(Roles = "admin,employee")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserDto>>> GetAllUsers()
         {
@@ -30,6 +34,7 @@ namespace BankSystem.Users.Controllers
             return Ok(users);
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<UserDto>> GetUserById(Guid id)
         {
@@ -39,6 +44,7 @@ namespace BankSystem.Users.Controllers
             return Ok(user);
         }
 
+        [AllowAnonymous]
         [HttpGet("email/{email}")]
         public async Task<ActionResult<UserDto>> GetUserByEmail(string email)
         {
@@ -48,6 +54,7 @@ namespace BankSystem.Users.Controllers
             return Ok(user);
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}/exists")]
         public async Task<ActionResult<bool>> UserExists(Guid id)
         {
@@ -55,6 +62,7 @@ namespace BankSystem.Users.Controllers
             return Ok(exists);
         }
 
+        [Authorize]
         [HttpGet("{id}/details")]
         public async Task<ActionResult<ClientDetailsDto>> GetClientDetails(Guid id)
         {
@@ -75,6 +83,7 @@ namespace BankSystem.Users.Controllers
             return Ok(details);
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<ActionResult<UserDto>> CreateUser(CreateUserRequest request)
         {
@@ -89,6 +98,68 @@ namespace BankSystem.Users.Controllers
             }
         }
 
+        [AllowAnonymous]
+        [HttpPost("register")]
+        public async Task<ActionResult<UserDto>> RegisterUser(RegisterUserRequest request)
+        {
+            try
+            {
+                var createRequest = new CreateUserRequest
+                {
+                    FirstName = request.FirstName,
+                    LastName = request.LastName,
+                    Email = request.Email,
+                    Phone = request.Phone,
+                    Role = request.Role
+                };
+
+                var user = await _userService.CreateUserAsync(createRequest);
+
+                var tempFile = Path.GetTempFileName() + ".json";
+                var jsonContent = $"{{\"userId\":\"{user.Id}\",\"email\":\"{user.Email}\",\"password\":\"{request.Password}\"}}";
+                await System.IO.File.WriteAllTextAsync(tempFile, jsonContent);
+
+                var process = new System.Diagnostics.Process
+                {
+                    StartInfo = new System.Diagnostics.ProcessStartInfo
+                    {
+                        FileName = "curl.exe",
+                        Arguments = $"-X POST http://127.0.0.1:5004/api/internal/Users -H \"Content-Type: application/json\" -d @\"{tempFile}\"",
+                        RedirectStandardOutput = true,
+                        RedirectStandardError = true,
+                        UseShellExecute = false,
+                        CreateNoWindow = true
+                    }
+                };
+
+                process.Start();
+                var response = await process.StandardOutput.ReadToEndAsync();
+                var error = await process.StandardError.ReadToEndAsync();
+
+                Console.WriteLine($"Curl response: {response}");
+                Console.WriteLine($"Curl error: {error}");
+
+                System.IO.File.Delete(tempFile);
+
+                if (!string.IsNullOrEmpty(error) && !error.Contains("Total"))
+                {
+                    return StatusCode(500, $"User created but password setup failed: {error}");
+                }
+
+                return CreatedAtAction(nameof(GetUserById), new { id = user.Id }, user);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception: {ex.Message}");
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<ActionResult<UserDto>> UpdateUser(Guid id, UpdateUserRequest request)
         {
@@ -98,6 +169,7 @@ namespace BankSystem.Users.Controllers
             return Ok(user);
         }
 
+        [Authorize(Roles = "admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(Guid id)
         {

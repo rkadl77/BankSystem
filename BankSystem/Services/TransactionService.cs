@@ -6,17 +6,20 @@ using Microsoft.EntityFrameworkCore;
 using BankSystem.Data;
 using BankSystem.Models;
 using BankSystem.DTOs;
+using System.Text.Json;
 
 namespace BankSystem.Services
 {
     public class TransactionService : ITransactionService
     {
         private readonly BankSystemContext _context;
+        private readonly WebSocketHandler _webSocketHandler;
         private readonly ICurrencyExchangeService _currencyExchangeService;
 
-        public TransactionService(BankSystemContext context, ICurrencyExchangeService currencyExchangeService)
+        public TransactionService(BankSystemContext context, WebSocketHandler webSocketHandler, ICurrencyExchangeService currencyExchangeService)
         {
             _context = context;
+            _webSocketHandler = webSocketHandler;
             _currencyExchangeService = currencyExchangeService;
         }
 
@@ -66,6 +69,17 @@ namespace BankSystem.Services
             _context.Transactions.Add(transaction);
             await _context.SaveChangesAsync();
 
+            var notification = JsonSerializer.Serialize(new
+            {
+                type = "transaction",
+                accountId = request.AccountId,
+                transactionId = transaction.Id,
+                amount = transaction.Amount,
+                timestamp = transaction.Timestamp,
+                description = transaction.Description
+            });
+            await _webSocketHandler.NotifyAccountUpdateAsync(request.AccountId, notification);
+
             return new TransactionDto
             {
                 Id = transaction.Id,
@@ -107,6 +121,17 @@ namespace BankSystem.Services
 
             _context.Transactions.Add(transaction);
             await _context.SaveChangesAsync();
+
+            var notification = JsonSerializer.Serialize(new
+            {
+                type = "transaction",
+                accountId = request.AccountId,
+                transactionId = transaction.Id,
+                amount = transaction.Amount,
+                timestamp = transaction.Timestamp,
+                description = transaction.Description
+            });
+            await _webSocketHandler.NotifyAccountUpdateAsync(request.AccountId, notification);
 
             return new TransactionDto
             {
@@ -172,6 +197,28 @@ namespace BankSystem.Services
                 _context.Transactions.AddRange(fromTransaction, toTransaction);
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
+
+                var fromNotification = JsonSerializer.Serialize(new
+                {
+                    type = "transaction",
+                    accountId = request.FromAccountId,
+                    transactionId = fromTransaction.Id,
+                    amount = fromTransaction.Amount,
+                    timestamp = fromTransaction.Timestamp,
+                    description = fromTransaction.Description
+                });
+                await _webSocketHandler.NotifyAccountUpdateAsync(request.FromAccountId, fromNotification);
+
+                var toNotification = JsonSerializer.Serialize(new
+                {
+                    type = "transaction",
+                    accountId = request.ToAccountId,
+                    transactionId = toTransaction.Id,
+                    amount = toTransaction.Amount,
+                    timestamp = toTransaction.Timestamp,
+                    description = toTransaction.Description
+                });
+                await _webSocketHandler.NotifyAccountUpdateAsync(request.ToAccountId, toNotification);
 
                 return true;
             }
