@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using BankSystem.Users.DTOs;
 using BankSystem.Users.Services;
 using BankSystem.Users.Clients;
-using System.Text;
-using System.IO;
 
 namespace BankSystem.Users.Controllers
 {
@@ -104,64 +102,22 @@ namespace BankSystem.Users.Controllers
         {
             try
             {
-                Console.WriteLine($"=== REGISTER USER ===");
-                Console.WriteLine($"Password from request: '{request.Password}'");
-                Console.WriteLine($"Password length: {request.Password.Length}");
-
                 var createRequest = new CreateUserRequest
                 {
                     FirstName = request.FirstName,
                     LastName = request.LastName,
                     Email = request.Email,
                     Phone = request.Phone,
-                    Role = request.Role
+                    Role = request.Role,
+                    Password = request.Password
                 };
 
                 var user = await _userService.CreateUserAsync(createRequest);
-
-                var tempFile = Path.GetTempFileName() + ".json";
-                var jsonContent = $"{{\"userId\":\"{user.Id}\",\"email\":\"{user.Email}\",\"password\":\"{request.Password}\"}}";
-                await System.IO.File.WriteAllTextAsync(tempFile, jsonContent);
-
-                Console.WriteLine($"Sending JSON: {jsonContent}");
-
-                var process = new System.Diagnostics.Process
-                {
-                    StartInfo = new System.Diagnostics.ProcessStartInfo
-                    {
-                        FileName = "curl.exe",
-                        Arguments = $"-X POST http://127.0.0.1:5004/api/internal/Users -H \"Content-Type: application/json\" -d @\"{tempFile}\"",
-                        RedirectStandardOutput = true,
-                        RedirectStandardError = true,
-                        UseShellExecute = false,
-                        CreateNoWindow = true
-                    }
-                };
-
-                process.Start();
-                var response = await process.StandardOutput.ReadToEndAsync();
-                var error = await process.StandardError.ReadToEndAsync();
-
-                Console.WriteLine($"Curl response: {response}");
-                Console.WriteLine($"Curl error: {error}");
-
-                System.IO.File.Delete(tempFile);
-
-                if (!string.IsNullOrEmpty(error) && !error.Contains("Total"))
-                {
-                    return StatusCode(500, $"User created but password setup failed: {error}");
-                }
-
                 return CreatedAtAction(nameof(GetUserById), new { id = user.Id }, user);
             }
             catch (InvalidOperationException ex)
             {
                 return BadRequest(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Exception: {ex.Message}");
-                return StatusCode(500, ex.Message);
             }
         }
 

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
-using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -9,10 +7,12 @@ namespace BankSystem.Auth.Services
 {
     public class UserProfileService : IUserProfileService
     {
+        private readonly HttpClient _httpClient;
         private readonly ILogger<UserProfileService> _logger;
 
-        public UserProfileService(ILogger<UserProfileService> logger)
+        public UserProfileService(HttpClient httpClient, ILogger<UserProfileService> logger)
         {
+            _httpClient = httpClient;
             _logger = logger;
         }
 
@@ -20,43 +20,28 @@ namespace BankSystem.Auth.Services
         {
             try
             {
-                _logger.LogInformation($"Getting user profile for email: {email}");
+                _logger.LogInformation("Getting user profile for email: {Email}", email);
 
-                var tempFile = Path.GetTempFileName() + ".json";
-                var process = new Process
+                var response = await _httpClient.GetAsync($"/api/users/email/{email}");
+                if (!response.IsSuccessStatusCode)
                 {
-                    StartInfo = new ProcessStartInfo
-                    {
-                        FileName = "curl.exe",
-                        Arguments = $"-X GET http://127.0.0.1:5002/api/users/email/{email}",
-                        RedirectStandardOutput = true,
-                        RedirectStandardError = true,
-                        UseShellExecute = false,
-                        CreateNoWindow = true
-                    }
-                };
+                    _logger.LogWarning("Failed to get user profile for email {Email}: {StatusCode}", email, response.StatusCode);
+                    return null;
+                }
 
-                process.Start();
-                var response = await process.StandardOutput.ReadToEndAsync();
-                var error = await process.StandardError.ReadToEndAsync();
-
-                _logger.LogInformation($"Curl response: {response}");
-
-                if (!string.IsNullOrEmpty(response))
+                var content = await response.Content.ReadAsStringAsync();
+                var userDto = JsonSerializer.Deserialize<UserDto>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                if (userDto != null)
                 {
-                    var userDto = JsonSerializer.Deserialize<UserDto>(response, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-                    if (userDto != null)
+                    return new UserProfile
                     {
-                        return new UserProfile
-                        {
-                            Id = userDto.Id,
-                            FirstName = userDto.FirstName,
-                            LastName = userDto.LastName,
-                            Email = userDto.Email,
-                            Role = userDto.Role,
-                            IsActive = userDto.IsActive
-                        };
-                    }
+                        Id = userDto.Id,
+                        FirstName = userDto.FirstName,
+                        LastName = userDto.LastName,
+                        Email = userDto.Email,
+                        Role = userDto.Role,
+                        IsActive = userDto.IsActive
+                    };
                 }
                 return null;
             }
@@ -71,39 +56,28 @@ namespace BankSystem.Auth.Services
         {
             try
             {
-                _logger.LogInformation($"Getting user profile for id: {userId}");
+                _logger.LogInformation("Getting user profile for id: {UserId}", userId);
 
-                var process = new Process
+                var response = await _httpClient.GetAsync($"/api/users/{userId}");
+                if (!response.IsSuccessStatusCode)
                 {
-                    StartInfo = new ProcessStartInfo
-                    {
-                        FileName = "curl.exe",
-                        Arguments = $"-X GET http://127.0.0.1:5002/api/users/{userId}",
-                        RedirectStandardOutput = true,
-                        RedirectStandardError = true,
-                        UseShellExecute = false,
-                        CreateNoWindow = true
-                    }
-                };
+                    _logger.LogWarning("Failed to get user profile for id {UserId}: {StatusCode}", userId, response.StatusCode);
+                    return null;
+                }
 
-                process.Start();
-                var response = await process.StandardOutput.ReadToEndAsync();
-
-                if (!string.IsNullOrEmpty(response))
+                var content = await response.Content.ReadAsStringAsync();
+                var userDto = JsonSerializer.Deserialize<UserDto>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                if (userDto != null)
                 {
-                    var userDto = JsonSerializer.Deserialize<UserDto>(response, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-                    if (userDto != null)
+                    return new UserProfile
                     {
-                        return new UserProfile
-                        {
-                            Id = userDto.Id,
-                            FirstName = userDto.FirstName,
-                            LastName = userDto.LastName,
-                            Email = userDto.Email,
-                            Role = userDto.Role,
-                            IsActive = userDto.IsActive
-                        };
-                    }
+                        Id = userDto.Id,
+                        FirstName = userDto.FirstName,
+                        LastName = userDto.LastName,
+                        Email = userDto.Email,
+                        Role = userDto.Role,
+                        IsActive = userDto.IsActive
+                    };
                 }
                 return null;
             }

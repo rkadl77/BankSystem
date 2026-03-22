@@ -39,7 +39,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddDbContext<UsersDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddHttpClient<UserService>(client => {
+    client.BaseAddress = new Uri("http://localhost:5109/");
+});
+builder.Services.AddScoped<IUserService>(sp => sp.GetRequiredService<UserService>());
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 
 builder.Services.AddHttpClient<CoreServiceClient>();

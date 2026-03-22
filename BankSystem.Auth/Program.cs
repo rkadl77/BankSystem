@@ -10,7 +10,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AuthDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddScoped<IUserProfileService, UserProfileService>();
+builder.Services.AddHttpClient<IUserProfileService, UserProfileService>(client => {
+    client.BaseAddress = new Uri("http://localhost:5276/");
+});
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
 builder.Services.AddScoped<IAuthStorageService, AuthStorageService>();

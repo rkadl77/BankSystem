@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BankSystem.Auth")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+53ca1ecce9e64030ae14d220d844fc10fcf9acae")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4fa832f5a3e1fb48bdf3ba078698bd19a50f691b")]
 [assembly: System.Reflection.AssemblyProductAttribute("BankSystem.Auth")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BankSystem.Auth")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

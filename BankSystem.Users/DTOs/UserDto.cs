@@ -21,6 +21,7 @@ namespace BankSystem.Users.DTOs
         public string Email { get; set; } = string.Empty;
         public string Phone { get; set; } = string.Empty;
         public string Role { get; set; } = "client";
+        public string Password { get; set; } = string.Empty;
     }
 
     public class UpdateUserRequest
