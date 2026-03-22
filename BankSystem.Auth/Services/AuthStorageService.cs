@@ -20,7 +20,9 @@ namespace BankSystem.Auth.Services
         {
             try
             {
-                Console.WriteLine($"Saving to DB: UserId={userId}, Email={email}");
+                Console.WriteLine($"=== AUTH STORAGE ===");
+                Console.WriteLine($"RAW PASSWORD RECEIVED: '{password}'");
+                Console.WriteLine($"PASSWORD LENGTH: {password.Length}");
 
                 var authUser = new AuthUser
                 {
@@ -33,7 +35,7 @@ namespace BankSystem.Auth.Services
                 _context.AuthUsers.Add(authUser);
                 await _context.SaveChangesAsync();
 
-                Console.WriteLine("Saved successfully");
+                Console.WriteLine($"Saved successfully with hash: {authUser.PasswordHash}");
             }
             catch (Exception ex)
             {
@@ -46,7 +48,9 @@ namespace BankSystem.Auth.Services
         {
             using var sha256 = SHA256.Create();
             var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-            return Convert.ToBase64String(hashedBytes);
+            var hash = Convert.ToBase64String(hashedBytes);
+            Console.WriteLine($"Generated hash: {hash}");
+            return hash;
         }
     }
 }

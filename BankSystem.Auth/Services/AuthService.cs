@@ -29,30 +29,37 @@ namespace BankSystem.Auth.Services
         {
             try
             {
+                Console.WriteLine($"Validating credentials for {email}");
+
                 var authUser = await _context.AuthUsers
                     .FirstOrDefaultAsync(u => u.Email == email);
 
                 if (authUser == null)
                 {
+                    Console.WriteLine($"User not found in AuthUsers: {email}");
                     return new AuthResult { Success = false, ErrorMessage = "User not found" };
                 }
 
                 if (!VerifyPassword(password, authUser.PasswordHash))
                 {
+                    Console.WriteLine($"Invalid password for {email}");
                     return new AuthResult { Success = false, ErrorMessage = "Invalid password" };
                 }
 
                 var profile = await _userProfileService.GetUserProfileAsync(email);
                 if (profile == null)
                 {
+                    Console.WriteLine($"Profile not found in UsersService for {email}");
                     return new AuthResult { Success = false, ErrorMessage = "User profile not found" };
                 }
 
                 if (!profile.IsActive)
                 {
+                    Console.WriteLine($"User is inactive: {email}");
                     return new AuthResult { Success = false, ErrorMessage = "User is inactive" };
                 }
 
+                Console.WriteLine($"Success: UserId={profile.Id}, Role={profile.Role}");
                 return new AuthResult
                 {
                     Success = true,

@@ -1,17 +1,19 @@
-using Microsoft.EntityFrameworkCore;
+using BankSystem.Auth.Config;
 using BankSystem.Auth.Data;
 using BankSystem.Auth.Services;
-using BankSystem.Auth.Config;
 using Duende.IdentityServer;
+using Duende.IdentityServer.Services;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<AuthDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-
-builder.Services.AddHttpClient<IUserProfileService, UserProfileService>();
+builder.Services.AddScoped<IUserProfileService, UserProfileService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IProfileService, ProfileService>();
+builder.Services.AddScoped<IAuthStorageService, AuthStorageService>();
 
 builder.Services.AddIdentityServer()
     .AddConfigurationStore(options =>
@@ -28,6 +30,7 @@ builder.Services.AddIdentityServer()
     })
     .AddDeveloperSigningCredential()
     .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>()
+    .AddProfileService<ProfileService>()
     .AddInMemoryClients(IdentityServerConfig.GetClients())
     .AddInMemoryApiResources(IdentityServerConfig.GetApiResources())
     .AddInMemoryApiScopes(IdentityServerConfig.GetApiScopes())
@@ -46,7 +49,7 @@ builder.Services.AddCors(options =>
               .AllowAnyHeader();
     });
 });
-builder.Services.AddScoped<IAuthStorageService, AuthStorageService>();
+builder.Services.AddHttpClient();
 
 var app = builder.Build();
 

@@ -104,6 +104,10 @@ namespace BankSystem.Users.Controllers
         {
             try
             {
+                Console.WriteLine($"=== REGISTER USER ===");
+                Console.WriteLine($"Password from request: '{request.Password}'");
+                Console.WriteLine($"Password length: {request.Password.Length}");
+
                 var createRequest = new CreateUserRequest
                 {
                     FirstName = request.FirstName,
@@ -118,6 +122,8 @@ namespace BankSystem.Users.Controllers
                 var tempFile = Path.GetTempFileName() + ".json";
                 var jsonContent = $"{{\"userId\":\"{user.Id}\",\"email\":\"{user.Email}\",\"password\":\"{request.Password}\"}}";
                 await System.IO.File.WriteAllTextAsync(tempFile, jsonContent);
+
+                Console.WriteLine($"Sending JSON: {jsonContent}");
 
                 var process = new System.Diagnostics.Process
                 {
