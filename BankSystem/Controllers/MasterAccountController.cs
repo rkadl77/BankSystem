@@ -97,5 +97,26 @@ namespace BankSystem.Controllers
             var result = await _masterAccountService.HasSufficientFundsAsync(amount);
             return Ok(result);
         }
+
+        /// <summary>Transfers funds from the master account to a client account.</summary>
+        /// <param name="request">The transfer details.</param>
+        /// <returns>A success response.</returns>
+        /// <response code="200">If the transfer was successful.</response>
+        /// <response code="401">Unauthorized.</response>
+        [Authorize]
+        [HttpPost("transfer-to-client")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> TransferToClient([FromBody] TransferToClientRequest request)
+        {
+            await _masterAccountService.TransferToClientAsync(request.ToAccountId, request.Amount);
+            return Ok();
+        }
+    }
+
+    public class TransferToClientRequest
+    {
+        public Guid ToAccountId { get; set; }
+        public decimal Amount { get; set; }
     }
 }

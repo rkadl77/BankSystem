@@ -6,6 +6,7 @@ using BankSystem.DTOs;
 using BankSystem.Models;
 using BankSystem.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -26,7 +27,9 @@ namespace BankSystem.Tests.Services
         private TransactionService GetService(BankSystemContext context, ICurrencyExchangeService? currencyService = null)
         {
             currencyService ??= Mock.Of<ICurrencyExchangeService>();
-            return new TransactionService(context, currencyService);
+            var wsLogger = Mock.Of<ILogger<WebSocketHandler>>();
+            var wsHandler = new WebSocketHandler(wsLogger);
+            return new TransactionService(context, wsHandler, currencyService);
         }
 
         #region TransferBetweenAccountsAsync Tests

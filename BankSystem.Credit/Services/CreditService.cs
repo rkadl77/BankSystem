@@ -1,4 +1,4 @@
-﻿using BankSystem.Credit.Clients;
+using BankSystem.Credit.Clients;
 using BankSystem.Credit.Data;
 using BankSystem.Credit.DTOs;
 using BankSystem.Credit.Models;
@@ -89,6 +89,14 @@ namespace BankSystem.Credit.Services
 
             if (!account.IsActive)
                 throw new InvalidOperationException("Account is not active");
+
+            var hasFunds = await _coreClient.HasSufficientFundsAsync(request.Amount);
+            if (!hasFunds)
+                throw new InvalidOperationException("Master account has insufficient funds");
+
+            var transferSuccess = await _coreClient.TransferFromMasterAsync(request.AccountId, request.Amount);
+            if (!transferSuccess)
+                throw new InvalidOperationException("Failed to transfer funds from master account");
 
             var credit = new Models.Credit
             {

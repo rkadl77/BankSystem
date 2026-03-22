@@ -1,6 +1,6 @@
 # .NET build outputs
-*/bin/
-*/obj/
+bin/
+obj/
 out/
 artifacts/
 

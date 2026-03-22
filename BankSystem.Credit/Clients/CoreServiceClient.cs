@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using System.Text.Json;
 using BankSystem.Credit.DTOs;
 
@@ -89,6 +89,49 @@ namespace BankSystem.Credit.Clients
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error withdrawing from account {AccountId}", accountId);
+                return false;
+            }
+        }
+
+        public async Task<bool> HasSufficientFundsAsync(decimal amount)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync($"/api/masteraccount/has-funds?amount={amount}");
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadFromJsonAsync<bool>();
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error checking master account funds");
+                return false;
+            }
+        }
+
+        public async Task<bool> TransferFromMasterAsync(Guid toAccountId, decimal amount)
+        {
+            try
+            {
+                var request = new
+                {
+                    ToAccountId = toAccountId,
+                    Amount = amount
+                };
+
+                var content = new StringContent(
+                    JsonSerializer.Serialize(request),
+                    Encoding.UTF8,
+                    "application/json");
+
+                var response = await _httpClient.PostAsync("/api/masteraccount/transfer-to-client", content);
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error transferring from master account to {ToAccountId}", toAccountId);
                 return false;
             }
         }

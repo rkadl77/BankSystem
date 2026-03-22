@@ -3040,19 +3040,19 @@
     ]
   },
   "packageFolders": {
-    "/home/yosef/.nuget/packages/": {}
+    "C:\\Users\\Yousef\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/mnt/c/Users/Yousef/Desktop/BankSystem/BankSystem.Credit/BankSystem.Credit.csproj",
+      "projectUniqueName": "c:\\Users\\Yousef\\Desktop\\BankSystem\\BankSystem.Credit\\BankSystem.Credit.csproj",
       "projectName": "BankSystem.Credit",
-      "projectPath": "/mnt/c/Users/Yousef/Desktop/BankSystem/BankSystem.Credit/BankSystem.Credit.csproj",
-      "packagesPath": "/home/yosef/.nuget/packages/",
-      "outputPath": "/mnt/c/Users/Yousef/Desktop/BankSystem/BankSystem.Credit/obj/",
+      "projectPath": "c:\\Users\\Yousef\\Desktop\\BankSystem\\BankSystem.Credit\\BankSystem.Credit.csproj",
+      "packagesPath": "C:\\Users\\Yousef\\.nuget\\packages\\",
+      "outputPath": "c:\\Users\\Yousef\\Desktop\\BankSystem\\BankSystem.Credit\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/yosef/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\Yousef\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -3129,7 +3129,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.419/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.418/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

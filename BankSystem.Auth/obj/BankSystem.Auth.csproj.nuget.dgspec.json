@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/mnt/c/Users/Yousef/Desktop/BankSystem/BankSystem.Auth/BankSystem.Auth.csproj": {}
+    "c:\\Users\\Yousef\\Desktop\\BankSystem\\BankSystem.Auth\\BankSystem.Auth.csproj": {}
   },
   "projects": {
-    "/mnt/c/Users/Yousef/Desktop/BankSystem/BankSystem.Auth/BankSystem.Auth.csproj": {
+    "c:\\Users\\Yousef\\Desktop\\BankSystem\\BankSystem.Auth\\BankSystem.Auth.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/mnt/c/Users/Yousef/Desktop/BankSystem/BankSystem.Auth/BankSystem.Auth.csproj",
+        "projectUniqueName": "c:\\Users\\Yousef\\Desktop\\BankSystem\\BankSystem.Auth\\BankSystem.Auth.csproj",
         "projectName": "BankSystem.Auth",
-        "projectPath": "/mnt/c/Users/Yousef/Desktop/BankSystem/BankSystem.Auth/BankSystem.Auth.csproj",
-        "packagesPath": "/home/yosef/.nuget/packages/",
-        "outputPath": "/mnt/c/Users/Yousef/Desktop/BankSystem/BankSystem.Auth/obj/",
+        "projectPath": "c:\\Users\\Yousef\\Desktop\\BankSystem\\BankSystem.Auth\\BankSystem.Auth.csproj",
+        "packagesPath": "C:\\Users\\Yousef\\.nuget\\packages\\",
+        "outputPath": "c:\\Users\\Yousef\\Desktop\\BankSystem\\BankSystem.Auth\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/yosef/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\Yousef\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -91,7 +91,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.419/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.418/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
