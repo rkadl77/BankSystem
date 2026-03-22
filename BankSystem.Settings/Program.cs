@@ -44,7 +44,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "SettingsService API", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "SettingsService API", Version = "v1", Description = "Settings and Configuration API" });
+
+    var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = System.IO.Path.Combine(AppContext.BaseDirectory, xmlFile);
+    c.IncludeXmlComments(xmlPath);
+    c.SchemaFilter<BankSystem.Settings.SwaggerExamples>();
 
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {

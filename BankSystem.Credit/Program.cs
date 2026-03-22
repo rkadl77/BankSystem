@@ -47,7 +47,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "CreditService API", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "CreditService API", Version = "v1", Description = "Credit Management API" });
+
+    var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = System.IO.Path.Combine(AppContext.BaseDirectory, xmlFile);
+    c.IncludeXmlComments(xmlPath);
+    c.SchemaFilter<BankSystem.Credit.SwaggerExamples>();
 
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {

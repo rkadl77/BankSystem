@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using BankSystem.Services;
 using System.Security.Claims;
@@ -41,7 +41,15 @@ namespace BankSystem.Controllers
             return role == "admin";
         }
 
+        /// <summary>Gets the master account's unique identifier.</summary>
+        /// <returns>The master account identifier.</returns>
+        /// <response code="200">Returns the master account ID.</response>
+        /// <response code="403">Forbidden.</response>
+        /// <response code="401">Unauthorized.</response>
         [HttpGet("id")]
+        [ProducesResponseType(typeof(Guid), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<Guid>> GetId()
         {
             if (!await IsAdminAsync())
@@ -51,7 +59,15 @@ namespace BankSystem.Controllers
             return Ok(id);
         }
 
+        /// <summary>Gets the master account balance.</summary>
+        /// <returns>The current balance of the master account.</returns>
+        /// <response code="200">Returns the balance.</response>
+        /// <response code="403">Forbidden.</response>
+        /// <response code="401">Unauthorized.</response>
         [HttpGet("balance")]
+        [ProducesResponseType(typeof(decimal), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<decimal>> GetBalance()
         {
             Console.WriteLine("=== GetBalance called ===");
@@ -63,7 +79,16 @@ namespace BankSystem.Controllers
             return Ok(balance);
         }
 
+        /// <summary>Checks if the master account has sufficient funds for a transaction.</summary>
+        /// <param name="amount">The required amount.</param>
+        /// <returns>True if there are sufficient funds, false otherwise.</returns>
+        /// <response code="200">Returns the availability of funds.</response>
+        /// <response code="403">Forbidden.</response>
+        /// <response code="401">Unauthorized.</response>
         [HttpGet("has-funds")]
+        [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<bool>> HasFunds([FromQuery] decimal amount)
         {
             if (!await IsAdminAsync())

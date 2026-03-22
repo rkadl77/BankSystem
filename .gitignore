@@ -30,6 +30,7 @@ artifacts/
 
 # Visual Studio files
 .vs/
+.qoder/
 .vscode/
 .idea/
 *.sln.ide
@@ -94,7 +95,7 @@ Desktop.ini
 # Docker
 .dockerignore
 
-*/Migrations/
+#*/Migrations/
 
 # Code coverage
 coverage/
