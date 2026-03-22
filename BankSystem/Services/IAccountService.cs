@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BankSystem.DTOs;
+using BankSystem.Models;
 
 namespace BankSystem.Services
 {
@@ -12,5 +13,6 @@ namespace BankSystem.Services
         Task<AccountDto> CreateAccountAsync(CreateAccountRequest request);
         Task<bool> CloseAccountAsync(Guid id);
         Task<decimal> GetBalanceAsync(Guid id);
+        Task<Account> GetMasterAccountAsync();
     }
 }

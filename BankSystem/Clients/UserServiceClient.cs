@@ -2,7 +2,12 @@
 
 namespace BankSystem.Clients
 {
-    public class UserServiceClient
+    public interface IUserServiceClient
+    {
+        Task<bool> UserExistsAsync(Guid userId);
+    }
+
+    public class UserServiceClient : IUserServiceClient
     {
         private readonly HttpClient _httpClient;
         private readonly ILogger<UserServiceClient> _logger;
@@ -14,7 +19,7 @@ namespace BankSystem.Clients
             _httpClient.BaseAddress = new Uri("http://localhost:5002");
         }
 
-        public async Task<bool> UserExistsAsync(Guid userId)
+        public virtual async Task<bool> UserExistsAsync(Guid userId)
         {
             try
             {

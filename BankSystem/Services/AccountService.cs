@@ -13,9 +13,9 @@ namespace BankSystem.Services
     public class AccountService : IAccountService
     {
         private readonly BankSystemContext _context;
-        private readonly UserServiceClient _userClient;
+        private readonly IUserServiceClient _userClient;
 
-        public AccountService(BankSystemContext context, UserServiceClient userClient)
+        public AccountService(BankSystemContext context, IUserServiceClient userClient)
         {
             _context = context;
             _userClient = userClient;
@@ -63,6 +63,10 @@ namespace BankSystem.Services
             if (!userExists)
                 throw new InvalidOperationException($"Client with id {request.ClientId} does not exist");
 
+            var masterExists = await _context.Accounts.AnyAsync(a => a.IsMasterAccount);
+            if (masterExists)
+                throw new InvalidOperationException("Master account already exists");
+
             var account = new Account
             {
                 Id = Guid.NewGuid(),
@@ -94,6 +98,9 @@ namespace BankSystem.Services
             if (account == null || !account.IsActive || account.Balance > 0)
                 return false;
 
+            if (account.IsMasterAccount)
+                throw new InvalidOperationException("Cannot close the master account");
+
             account.IsActive = false;
             account.ClosedAt = DateTime.UtcNow;
             await _context.SaveChangesAsync();
@@ -104,6 +111,17 @@ namespace BankSystem.Services
         {
             var account = await _context.Accounts.FindAsync(id);
             return account?.Balance ?? 0;
+        }
+
+        public async Task<Account> GetMasterAccountAsync()
+        {
+            var masterAccount = await _context.Accounts
+                .FirstOrDefaultAsync(a => a.IsMasterAccount);
+
+            if (masterAccount == null)
+                throw new InvalidOperationException("Master account not found");
+
+            return masterAccount;
         }
 
         private string GenerateAccountNumber()

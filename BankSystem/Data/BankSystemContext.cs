@@ -24,6 +24,18 @@ namespace BankSystem.Data
                 entity.Property(e => e.Balance).HasPrecision(18, 2);
                 entity.Property(e => e.Currency).IsRequired().HasMaxLength(3);
                 entity.HasIndex(e => e.AccountNumber).IsUnique();
+
+                entity.HasData(new Account
+                {
+                    Id = Guid.Parse("00000000-0000-0000-0000-000000000001"),
+                    AccountNumber = "MASTER-001",
+                    ClientId = null,
+                    Balance = 100000.00m,
+                    Currency = "USD",
+                    CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                    IsActive = true,
+                    IsMasterAccount = true
+                });
             });
 
             modelBuilder.Entity<Transaction>(entity =>

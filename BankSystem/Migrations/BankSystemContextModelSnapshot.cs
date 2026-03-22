@@ -37,7 +37,7 @@ namespace BankSystem.Migrations
                         .HasPrecision(18, 2)
                         .HasColumnType("numeric(18,2)");
 
-                    b.Property<Guid>("ClientId")
+                    b.Property<Guid?>("ClientId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("ClosedAt")
@@ -54,12 +54,27 @@ namespace BankSystem.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
+                    b.Property<bool>("IsMasterAccount")
+                        .HasColumnType("boolean");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AccountNumber")
                         .IsUnique();
 
                     b.ToTable("Accounts");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000001"),
+                            AccountNumber = "MASTER-001",
+                            Balance = 100000.00m,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Currency = "USD",
+                            IsActive = true,
+                            IsMasterAccount = true
+                        });
                 });
 
             modelBuilder.Entity("BankSystem.Models.Transaction", b =>
