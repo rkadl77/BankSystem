@@ -94,8 +94,7 @@ Desktop.ini
 # Docker
 .dockerignore
 
-# Migration files (optional - comment out if you want to track migrations)
-# Migrations/
+*/Migrations/
 
 # Code coverage
 coverage/
