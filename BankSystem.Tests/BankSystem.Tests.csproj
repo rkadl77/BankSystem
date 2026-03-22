@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BankSystem\BankSystem.csproj" />
+    <ProjectReference Include="..\BankSystem.Credit\BankSystem.Credit.csproj" />
   </ItemGroup>
 
 </Project>

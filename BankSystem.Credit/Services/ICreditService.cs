@@ -13,5 +13,9 @@ namespace BankSystem.Credit.Services
         Task<bool> RepayCreditAsync(RepayCreditRequest request);
         Task<IEnumerable<CreditDto>> GetActiveCreditsAsync();
         Task<decimal> GetTotalDebtByClientIdAsync(Guid clientId);
+        Task<IEnumerable<CreditDto>> GetOverdueCreditsAsync(Guid clientId);
+        Task<CreditRatingDto> CalculateCreditRatingAsync(Guid clientId);
+        Task<bool> UpdateCreditStatusAsync(Guid creditId);
+        Task<CreditDetailDto?> GetCreditDetailsAsync(Guid creditId);
     }
 }

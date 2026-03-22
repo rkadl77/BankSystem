@@ -67,5 +67,37 @@ namespace BankSystem.Credit.Controllers
                 return BadRequest("Repayment failed");
             return Ok(new { message = "Repayment successful" });
         }
+
+        [HttpGet("client/{clientId}/overdue")]
+        public async Task<ActionResult<IEnumerable<CreditDto>>> GetOverdueCredits(Guid clientId)
+        {
+            var credits = await _creditService.GetOverdueCreditsAsync(clientId);
+            return Ok(credits);
+        }
+
+        [HttpGet("client/{clientId}/rating")]
+        public async Task<ActionResult<CreditRatingDto>> GetCreditRating(Guid clientId)
+        {
+            var rating = await _creditService.CalculateCreditRatingAsync(clientId);
+            return Ok(rating);
+        }
+
+        [HttpGet("{id}/details")]
+        public async Task<ActionResult<CreditDetailDto>> GetCreditDetails(Guid id)
+        {
+            var credit = await _creditService.GetCreditDetailsAsync(id);
+            if (credit == null)
+                return NotFound();
+            return Ok(credit);
+        }
+
+        [HttpPost("{id}/update-status")]
+        public async Task<IActionResult> UpdateCreditStatus(Guid id)
+        {
+            var result = await _creditService.UpdateCreditStatusAsync(id);
+            if (!result)
+                return NotFound();
+            return Ok(new { message = "Status updated successfully" });
+        }
     }
 }

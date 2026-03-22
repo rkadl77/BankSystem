@@ -199,5 +199,127 @@ namespace BankSystem.Credit.Services
 
             return credits.Sum(c => c.RemainingAmount);
         }
+
+        public async Task<IEnumerable<CreditDto>> GetOverdueCreditsAsync(Guid clientId)
+        {
+            var credits = await _context.Credits
+                .Include(c => c.Tariff)
+                .Where(c => c.ClientId == clientId)
+                .Where(c => c.Status == "Overdue" || (c.Status != "Paid" && c.Status != "Defaulted" && c.PaymentDueDate < DateTime.UtcNow))
+                .ToListAsync();
+
+            return credits.Select(c => new CreditDto
+            {
+                Id = c.Id,
+                ClientId = c.ClientId,
+                AccountId = c.AccountId,
+                TariffName = c.Tariff != null ? c.Tariff.Name : "",
+                Amount = c.Amount,
+                RemainingAmount = c.RemainingAmount,
+                InterestRate = c.InterestRate,
+                StartDate = c.StartDate,
+                EndDate = c.EndDate,
+                Status = c.Status
+            });
+        }
+
+        public async Task<CreditRatingDto> CalculateCreditRatingAsync(Guid clientId)
+        {
+            var credits = await _context.Credits
+                .Include(c => c.Payments)
+                .Where(c => c.ClientId == clientId)
+                .ToListAsync();
+
+            var totalCount = credits.Count;
+            var overdueCount = credits.Count(c => c.Status == "Overdue" || c.DaysOverdue > 0);
+            var defaultedCount = credits.Count(c => c.Status == "Defaulted");
+
+            var totalOverdueDays = credits.Sum(c => c.DaysOverdue);
+            var onTimePayments = credits
+                .SelectMany(c => c.Payments ?? new List<CreditPayment>())
+                .Count(p => p.Status == "completed" && p.PaymentDate <= p.PaymentDate.AddDays(-1));
+
+            var rating = CreditRatingCalculator.CalculateRating(totalOverdueDays, defaultedCount, onTimePayments);
+            var description = CreditRatingCalculator.GetRatingDescription(rating);
+
+            var onTimePercentage = totalCount > 0
+                ? (decimal)(totalCount - overdueCount - defaultedCount) / totalCount * 100
+                : 100m;
+
+            return new CreditRatingDto
+            {
+                ClientId = clientId,
+                Rating = rating,
+                Description = description,
+                OverdueCount = overdueCount,
+                TotalCount = totalCount,
+                OnTimePercentage = onTimePercentage
+            };
+        }
+
+        public async Task<bool> UpdateCreditStatusAsync(Guid creditId)
+        {
+            var credit = await _context.Credits.FindAsync(creditId);
+            if (credit == null)
+                return false;
+
+            var now = DateTime.UtcNow;
+
+            // If current date is past due date and not paid, mark as Overdue
+            if (now > credit.PaymentDueDate && credit.Status != "Paid" && credit.Status != "Defaulted")
+            {
+                credit.Status = "Overdue";
+            }
+
+            // If was Overdue but now has payment after due date, mark as Paid
+            if (credit.Status == "Overdue" && credit.LastPaymentDate.HasValue && credit.LastPaymentDate.Value > credit.PaymentDueDate)
+            {
+                credit.Status = "Paid";
+            }
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<CreditDetailDto?> GetCreditDetailsAsync(Guid creditId)
+        {
+            var credit = await _context.Credits
+                .Include(c => c.Tariff)
+                .Include(c => c.Payments)
+                .FirstOrDefaultAsync(c => c.Id == creditId);
+
+            if (credit == null) return null;
+
+            var rating = await CalculateCreditRatingAsync(credit.ClientId);
+
+            return new CreditDetailDto
+            {
+                Id = credit.Id,
+                ClientId = credit.ClientId,
+                AccountId = credit.AccountId,
+                TariffName = credit.Tariff != null ? credit.Tariff.Name : "",
+                Amount = credit.Amount,
+                RemainingAmount = credit.RemainingAmount,
+                InterestRate = credit.InterestRate,
+                StartDate = credit.StartDate,
+                EndDate = credit.EndDate,
+                Status = credit.Status,
+                PaymentDueDate = credit.PaymentDueDate,
+                LastPaymentDate = credit.LastPaymentDate,
+                TermMonths = credit.TermMonths,
+                DaysOverdue = credit.DaysOverdue,
+                RatingDescription = rating.Description,
+                Payments = credit.Payments != null
+                    ? credit.Payments.Select(p => new CreditPaymentDto
+                    {
+                        Id = p.Id,
+                        CreditId = p.CreditId,
+                        Amount = p.Amount,
+                        PaymentDate = p.PaymentDate,
+                        Status = p.Status
+                    }).ToList()
+                    : new List<CreditPaymentDto>()
+            };
+        }
     }
 }
