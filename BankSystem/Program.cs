@@ -12,7 +12,7 @@ builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddScoped<ICurrencyExchangeService, CurrencyExchangeService>();
 
-builder.Services.AddHttpClient<UserServiceClient>();
+builder.Services.AddHttpClient<IUserServiceClient, UserServiceClient>();
 builder.Services.AddHttpClient<CurrencyExchangeService>();
 builder.Services.AddMemoryCache();
 
