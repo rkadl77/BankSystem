@@ -23,7 +23,23 @@ namespace BankSystem.Auth.Config
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Email,
-                        "bank.api"
+                        "bank.api",
+                        "roles"  // api scope
+                    }
+                },
+                new Client
+                {
+                    ClientId = "bank.password",
+                    ClientName = "Bank Password Client",
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+                    RequireClientSecret = false,
+                    AlwaysIncludeUserClaimsInIdToken = true,
+                    AllowedScopes = {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.Email,
+                        "bank.api",
+                        "roles"
                     }
                 },
                 new Client
@@ -38,7 +54,8 @@ namespace BankSystem.Auth.Config
                     AllowedScopes = {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
-                        "bank.api"
+                        "bank.api",
+                        "roles"
                     }
                 },
                 new Client
@@ -47,7 +64,7 @@ namespace BankSystem.Auth.Config
                     ClientName = "Bank Service",
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
                     ClientSecrets = { new Secret("service-secret".Sha256()) },
-                    AllowedScopes = { "bank.api" }
+                    AllowedScopes = { "bank.api", "roles" }
                 }
             };
         }
@@ -67,7 +84,8 @@ namespace BankSystem.Auth.Config
         {
             return new List<ApiScope>
             {
-                new ApiScope("bank.api", "Bank API Access")
+                new ApiScope("bank.api", "Bank API Access"),
+                new ApiScope("roles", "User roles")
             };
         }
 

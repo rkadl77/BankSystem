@@ -1,6 +1,9 @@
 ﻿using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Validation;
 using System.Threading.Tasks;
+using System.Security.Claims;
+using System.Collections.Generic;
+using BankSystem.Auth.Services;
 
 namespace BankSystem.Auth.Services
 {
@@ -15,16 +18,21 @@ namespace BankSystem.Auth.Services
 
         public async Task ValidateAsync(ResourceOwnerPasswordValidationContext context)
         {
-            var result = await _authService.ValidateCredentialsAsync(
-                context.UserName,
-                context.Password);
+            var result = await _authService.ValidateCredentialsAsync(context.UserName, context.Password);
+
+            Console.WriteLine($"Validation result: Success={result.Success}, Role={result.Role}, UserId={result.UserId}");
 
             if (result.Success && result.UserId.HasValue)
             {
+                var claims = new List<Claim>
+                {
+                    new Claim("role", result.Role ?? "client")
+                };
+
                 context.Result = new GrantValidationResult(
-                    result.UserId.Value.ToString(),
-                    "password",
-                    claims: null);
+                    subject: result.UserId.Value.ToString(),
+                    authenticationMethod: "password",
+                    claims: claims);
             }
             else
             {
