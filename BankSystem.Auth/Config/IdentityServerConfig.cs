@@ -9,38 +9,24 @@ namespace BankSystem.Auth.Config
         {
             return new List<Client>
             {
+
+                    
                 new Client
                 {
-                    ClientId = "bank.client",
-                    ClientName = "Bank Web Client",
-                    AllowedGrantTypes = GrantTypes.Code,
-                    RequireClientSecret = false,
-                    RequirePkce = true,
-                    RedirectUris = { "http://localhost:3000/callback" },
-                    PostLogoutRedirectUris = { "http://localhost:3000" },
-                    AllowedCorsOrigins = { "http://localhost:3000" },
-                    AllowedScopes = {
-                        IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile,
-                        IdentityServerConstants.StandardScopes.Email,
-                        "bank.api",
-                        "roles"  // api scope
-                    }
-                },
-                new Client
-                {
-                    ClientId = "bank.password",
-                    ClientName = "Bank Password Client",
-                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
-                    RequireClientSecret = false,
-                    AlwaysIncludeUserClaimsInIdToken = true,
-                    AllowedScopes = {
-                        IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile,
-                        IdentityServerConstants.StandardScopes.Email,
-                        "bank.api",
-                        "roles"
-                    }
+                ClientId = "bank.client",
+                ClientName = "Bank Client",
+                AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials,
+                ClientSecrets = { new Secret("secret".Sha256()) },
+                RedirectUris = { "http://localhost:3000/callback" },
+                PostLogoutRedirectUris = { "http://localhost:3000" },
+                AllowedCorsOrigins = { "http://localhost:3000" },
+                AllowedScopes = {
+                    IdentityServerConstants.StandardScopes.OpenId,
+                    IdentityServerConstants.StandardScopes.Profile,
+                    IdentityServerConstants.StandardScopes.Email,
+                    "bank.api",
+                    "roles"
+                }
                 },
                 new Client
                 {

@@ -4,27 +4,35 @@ using BankSystem.Credit.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var jwtKey = Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]);
-
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        options.Authority = builder.Configuration["Jwt:Issuer"];
+        options.Authority = "http://localhost:5109";
         options.RequireHttpsMetadata = false;
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
-            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidIssuer = "http://localhost:5109",
             ValidateAudience = true,
-            ValidAudience = builder.Configuration["Jwt:Audience"],
+            ValidAudience = "bank.api",
             ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(jwtKey)
+        };
+        options.Events = new JwtBearerEvents
+        {
+            OnAuthenticationFailed = ctx => {
+                Console.WriteLine($"JWT failed: {ctx.Exception.Message}");
+                return Task.CompletedTask;
+            },
+            OnTokenValidated = ctx => {
+                Console.WriteLine("JWT valid. Claims:");
+                foreach (var c in ctx.Principal.Claims)
+                    Console.WriteLine($"  {c.Type}: {c.Value}");
+                return Task.CompletedTask;
+            }
         };
     });
 

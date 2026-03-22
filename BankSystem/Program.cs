@@ -7,53 +7,32 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Net.WebSockets;
-using System.Security.Cryptography;
 
 var builder = WebApplication.CreateBuilder(args);
-
-var rsa = RSA.Create();
-rsa.ImportFromPem(@"
------BEGIN RSA PUBLIC KEY-----
-MIIBCgKCAQEAyuFEkRtySztyGn8j9Av0WAJlFDO/AQb9oeuGnotwPLvkdIqzFKir
-dg2fXAwiOMDycqjI71gdsu5qrkP4JCgzY+qCGqE7wBhKDxJZqGtUZMt+7pXOUhTb
-9+X9QGM/YBFoST89HJY8nwDX2jyukUyp7Ptge4l7FNL5j2dgl6WNpDC59JMFeeAq
-+r8irSKCCX9c0atsuLmD50XzmhzNqf5DsxXVVbp9hrynhVqGLXu07BsLxx4iBbII
-zxppJf4WUAoc5RThDf2OFnglsHo9eLo2PJKva7TJBR3hhZ68x+bB4uyapBYw1Fmr
-YX3Du2UI53PxLA5AIIMJhGEzP7+vUd8pUQIDAQAB
------END RSA PUBLIC KEY-----
-");
-
-var signingKey = new RsaSecurityKey(rsa);
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
+        options.Authority = "http://localhost:5109";
+        options.RequireHttpsMetadata = false;
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
-            ValidIssuer = "http://localhost:5004",
+            ValidIssuer = "http://localhost:5109",
             ValidateAudience = true,
             ValidAudience = "bank.api",
             ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = signingKey
         };
-
         options.Events = new JwtBearerEvents
         {
-            OnAuthenticationFailed = context =>
-            {
-                Console.WriteLine($"JWT Authentication failed: {context.Exception.Message}");
+            OnAuthenticationFailed = ctx => {
+                Console.WriteLine($"JWT failed: {ctx.Exception.Message}");
                 return Task.CompletedTask;
             },
-            OnTokenValidated = context =>
-            {
-                Console.WriteLine("=== TOKEN CLAIMS ===");
-                foreach (var claim in context.Principal.Claims)
-                {
-                    Console.WriteLine($"{claim.Type}: {claim.Value}");
-                }
-                Console.WriteLine("JWT Token validated successfully");
+            OnTokenValidated = ctx => {
+                Console.WriteLine("JWT valid. Claims:");
+                foreach (var c in ctx.Principal.Claims)
+                    Console.WriteLine($"  {c.Type}: {c.Value}");
                 return Task.CompletedTask;
             }
         };

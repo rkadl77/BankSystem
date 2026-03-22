@@ -1,1 +1,11 @@
-{"Version":1,"Hash":"hBQ6QNhbPqiF7G4Pvh5tWspkH9AOi99B+0shNQLTQk0=","Source":"BankSystem.Auth","BasePath":"_content/BankSystem.Auth","Mode":"Default","ManifestType":"Build","ReferencedProjectsConfiguration":[],"DiscoveryPatterns":[],"Assets":[],"Endpoints":[]}
+{
+  "Version": 1,
+  "Hash": "LhJjqwGOjgediQFTDEkw4lzynBUZvjd+fH8Yv23tq3Q=",
+  "Source": "BankSystem.Auth",
+  "BasePath": "_content/BankSystem.Auth",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

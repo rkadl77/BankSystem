@@ -12,11 +12,12 @@ namespace BankSystem.Clients
         private readonly HttpClient _httpClient;
         private readonly ILogger<UserServiceClient> _logger;
 
-        public UserServiceClient(HttpClient httpClient, ILogger<UserServiceClient> logger)
+        public UserServiceClient(HttpClient httpClient, ILogger<UserServiceClient> logger, IConfiguration configuration)
         {
             _httpClient = httpClient;
             _logger = logger;
-            _httpClient.BaseAddress = new Uri("http://localhost:5002");
+            var usersServiceUrl = configuration["Services:UsersService"] ?? "http://localhost:5276";
+            _httpClient.BaseAddress = new Uri(usersServiceUrl);
         }
 
         public virtual async Task<bool> UserExistsAsync(Guid userId)
