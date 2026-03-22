@@ -61,7 +61,8 @@ namespace BankSystem.Auth.Config
             {
                 new ApiResource("bank.api", "Bank API")
                 {
-                    Scopes = { "bank.api" }
+                    Scopes = { "bank.api" },
+                    UserClaims = { "role" }
                 }
             };
         }

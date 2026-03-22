@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -58,7 +58,7 @@ namespace BankSystem.Auth.Services
             {
                 _logger.LogInformation("Getting user profile for id: {UserId}", userId);
 
-                var response = await _httpClient.GetAsync($"/api/users/{userId}");
+                var response = await _httpClient.GetAsync($"/api/users/internal/{userId}");
                 if (!response.IsSuccessStatusCode)
                 {
                     _logger.LogWarning("Failed to get user profile for id {UserId}: {StatusCode}", userId, response.StatusCode);

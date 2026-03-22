@@ -59,6 +59,18 @@ namespace BankSystem.Users.Controllers
             return Ok(user);
         }
 
+        /// <summary>[AllowAnonymous] Internal use: Gets a user by their unique identifier.</summary>
+        /// <param name="id">The user's unique identifier.</param>
+        /// <returns>The user details.</returns>
+        [AllowAnonymous]
+        [HttpGet("internal/{id}")]
+        public async Task<ActionResult<UserDto>> GetUserByIdInternal(Guid id)
+        {
+            var user = await _userService.GetUserByIdAsync(id);
+            if (user == null) return NotFound();
+            return Ok(user);
+        }
+
         /// <summary>[AllowAnonymous] Gets a user by their email address.</summary>
         /// <param name="email">The email address to search for.</param>
         /// <returns>The user details.</returns>
