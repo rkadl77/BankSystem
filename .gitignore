@@ -1,0 +1,109 @@
+# .NET build outputs
+bin/
+obj/
+out/
+artifacts/
+
+# User-specific files
+*.rsuser
+*.user
+*.userosscache
+*.suo
+*.userprefs
+
+# Build results
+*.dll
+*.exe
+*.exp
+*.pdb
+*.mdb
+*.pyc
+*.pyo
+*.pidb
+*.psess
+*.vsp
+*.vspx
+*.nupkg
+*.snk
+*.pfx
+*.p7s
+
+# Visual Studio files
+.vs/
+.vscode/
+.idea/
+*.sln.ide
+*.swp
+*.swo
+*~
+
+# Test results
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+*.coverargs
+
+# Package manager
+packages/
+*.nupkg
+*.snupkg
+project.lock.json
+project.fragment.lock.json
+
+# Global Package Cache
+.nuget/
+.nuget/NuGet.Config
+
+# Node.js (if using with frontend)
+node_modules/
+wwwroot/lib/
+package-lock.json
+yarn.lock
+
+# Environment files
+.env
+.env.*
+*.local.json
+appsettings.Development.json
+appsettings.Local.json
+
+# Logs
+logs/
+*.log
+*.txt.old
+
+# Publish output
+/publish/
+
+# IDE specific
+_ReSharper.Caches/
+*.DotSettings.user
+*.sln.docstates
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# Docker
+.dockerignore
+
+# Migration files (optional - comment out if you want to track migrations)
+# Migrations/
+
+# Code coverage
+coverage/
+*.coverage
+*.coveragexml
+*.coverlet
+*.trx
+
+# Build artifacts
+/build/
+/dist/
