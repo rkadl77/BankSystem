@@ -45,6 +45,12 @@ namespace BankSystem.Credit.Migrations
                         .HasPrecision(5, 2)
                         .HasColumnType("numeric(5,2)");
 
+                    b.Property<DateTime?>("LastPaymentDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("PaymentDueDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<decimal>("RemainingAmount")
                         .HasPrecision(18, 2)
                         .HasColumnType("numeric(18,2)");
@@ -59,6 +65,9 @@ namespace BankSystem.Credit.Migrations
 
                     b.Property<Guid>("TariffId")
                         .HasColumnType("uuid");
+
+                    b.Property<int>("TermMonths")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 

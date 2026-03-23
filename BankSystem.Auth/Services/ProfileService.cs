@@ -33,7 +33,13 @@ namespace BankSystem.Auth.Services
                 }
                 else
                 {
-                    Console.WriteLine($"User not found for id: {userId}");
+                    Console.WriteLine($"User not found for id: {userId}, falling back to subject claims");
+                    var roleClaim = context.Subject.FindFirst("role");
+                    if (roleClaim != null)
+                    {
+                        Console.WriteLine($"Using role from subject claims: {roleClaim.Value}");
+                        context.IssuedClaims.Add(new Claim("role", roleClaim.Value));
+                    }
                 }
             }
         }

@@ -77,7 +77,14 @@ namespace BankSystem.Controllers
         {
             try
             {
-                var result = await _transactionService.TransferAsync(request);
+                var betweenRequest = new TransferBetweenAccountsRequest
+                {
+                    FromAccountId = request.FromAccountId,
+                    ToAccountId = request.ToAccountId,
+                    Amount = request.Amount,
+                    Description = request.Description
+                };
+                await _transactionService.TransferBetweenAccountsAsync(betweenRequest);
                 return Ok(new { message = "Transfer completed successfully" });
             }
             catch (InvalidOperationException ex)

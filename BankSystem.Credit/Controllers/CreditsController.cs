@@ -17,7 +17,7 @@ namespace BankSystem.Credit.Controllers
             _creditService = creditService;
         }
 
-        [Authorize(Roles = "admin,employee")]
+        [Authorize]
         [HttpGet("client/{clientId}")]
         public async Task<ActionResult<IEnumerable<CreditDto>>> GetCreditsByClientId(Guid clientId)
         {
@@ -43,7 +43,7 @@ namespace BankSystem.Credit.Controllers
             return Ok(credit);
         }
 
-        [Authorize(Roles = "admin,employee")]
+        [Authorize]
         [HttpGet("client/{clientId}/total-debt")]
         public async Task<ActionResult<decimal>> GetTotalDebtByClientId(Guid clientId)
         {

@@ -90,6 +90,10 @@ namespace BankSystem.Migrations
                         .HasPrecision(18, 2)
                         .HasColumnType("numeric(18,2)");
 
+                    b.Property<decimal?>("ConversionRate")
+                        .HasPrecision(18, 6)
+                        .HasColumnType("numeric(18,6)");
+
                     b.Property<string>("Currency")
                         .IsRequired()
                         .HasMaxLength(3)
@@ -98,6 +102,10 @@ namespace BankSystem.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
+                    b.Property<string>("OriginalCurrency")
+                        .HasMaxLength(3)
+                        .HasColumnType("character varying(3)");
+
                     b.Property<Guid?>("RelatedTransactionId")
                         .HasColumnType("uuid");
 
@@ -105,6 +113,10 @@ namespace BankSystem.Migrations
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)");
+
+                    b.Property<string>("TargetCurrency")
+                        .HasMaxLength(3)
+                        .HasColumnType("character varying(3)");
 
                     b.Property<DateTime>("Timestamp")
                         .HasColumnType("timestamp with time zone");

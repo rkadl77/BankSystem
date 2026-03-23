@@ -265,7 +265,7 @@ namespace BankSystem.Services
                         Type = "transfer_out",
                         Status = "completed",
                         Timestamp = DateTime.UtcNow,
-                        Description = $"Transfer to {toAccount.AccountNumber}",
+                        Description = request.Description ?? $"Transfer to {toAccount.AccountNumber}",
                         RelatedTransactionId = transactionId
                     };
 
@@ -278,7 +278,7 @@ namespace BankSystem.Services
                         Type = "transfer_in",
                         Status = "completed",
                         Timestamp = DateTime.UtcNow,
-                        Description = $"Transfer from {fromAccount.AccountNumber}",
+                        Description = request.Description ?? $"Transfer from {fromAccount.AccountNumber}",
                         RelatedTransactionId = transactionId
                     };
 
@@ -307,7 +307,7 @@ namespace BankSystem.Services
                         Type = "transfer_out",
                         Status = "completed",
                         Timestamp = DateTime.UtcNow,
-                        Description = $"Transfer to {toAccount.AccountNumber}",
+                        Description = request.Description ?? $"Transfer to {toAccount.AccountNumber}",
                         RelatedTransactionId = transactionId,
                         ConversionRate = conversionRate,
                         OriginalCurrency = fromAccount.Currency,
@@ -324,7 +324,7 @@ namespace BankSystem.Services
                         Type = "transfer_in",
                         Status = "completed",
                         Timestamp = DateTime.UtcNow,
-                        Description = $"Transfer from {fromAccount.AccountNumber}",
+                        Description = request.Description ?? $"Transfer from {fromAccount.AccountNumber}",
                         RelatedTransactionId = transactionId,
                         ConversionRate = conversionRate,
                         OriginalCurrency = fromAccount.Currency,

@@ -14,6 +14,9 @@ namespace BankSystem.Credit.DTOs
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public string Status { get; set; } = string.Empty;
+        public DateTime PaymentDueDate { get; set; }
+        public int DaysOverdue { get; set; }
+        public int TermMonths { get; set; }
     }
 
     public class CreateCreditRequest
@@ -22,6 +25,8 @@ namespace BankSystem.Credit.DTOs
         public Guid AccountId { get; set; }
         public Guid TariffId { get; set; }
         public decimal Amount { get; set; }
+        /// <summary>Срок в месяцах. 0 = немедленная просрочка (для демо).</summary>
+        public int TermMonths { get; set; } = 12;
     }
 
     public class CreditDetailsDto

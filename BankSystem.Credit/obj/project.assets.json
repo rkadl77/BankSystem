@@ -3040,19 +3040,19 @@
     ]
   },
   "packageFolders": {
-    "/home/yosef/.nuget/packages/": {}
+    "/Users/glebkorotkov/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/mnt/c/Users/Yousef/Desktop/BankSystem/BankSystem.Credit/BankSystem.Credit.csproj",
+      "projectUniqueName": "/Users/glebkorotkov/github/BankSystem1/BankSystem.Credit/BankSystem.Credit.csproj",
       "projectName": "BankSystem.Credit",
-      "projectPath": "/mnt/c/Users/Yousef/Desktop/BankSystem/BankSystem.Credit/BankSystem.Credit.csproj",
-      "packagesPath": "/home/yosef/.nuget/packages/",
-      "outputPath": "/mnt/c/Users/Yousef/Desktop/BankSystem/BankSystem.Credit/obj/",
+      "projectPath": "/Users/glebkorotkov/github/BankSystem1/BankSystem.Credit/BankSystem.Credit.csproj",
+      "packagesPath": "/Users/glebkorotkov/.nuget/packages/",
+      "outputPath": "/Users/glebkorotkov/github/BankSystem1/BankSystem.Credit/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/yosef/.nuget/NuGet/NuGet.Config"
+        "/Users/glebkorotkov/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -3075,7 +3075,8 @@
         "enableAudit": "true",
         "auditLevel": "low",
         "auditMode": "direct"
-      }
+      },
+      "SdkAnalysisLevel": "9.0.300"
     },
     "frameworks": {
       "net8.0": {
@@ -3121,6 +3122,20 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.AspNetCore.App.Ref",
+            "version": "[8.0.21, 8.0.21]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Host.osx-arm64",
+            "version": "[8.0.21, 8.0.21]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Ref",
+            "version": "[8.0.21, 8.0.21]"
+          }
+        ],
         "frameworkReferences": {
           "Microsoft.AspNetCore.App": {
             "privateAssets": "none"
@@ -3129,7 +3144,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.419/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/Users/glebkorotkov/.dotnet/sdk/9.0.306/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
-using System.IO;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BankSystem.Auth.Controllers
 {
@@ -9,32 +6,47 @@ namespace BankSystem.Auth.Controllers
     [Route("api/[controller]")]
     public class TokenController : ControllerBase
     {
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IConfiguration _configuration;
+
+        public TokenController(IHttpClientFactory httpClientFactory, IConfiguration configuration)
+        {
+            _httpClientFactory = httpClientFactory;
+            _configuration = configuration;
+        }
+
         [HttpPost]
         public async Task<IActionResult> GetToken([FromBody] TokenRequest request)
         {
-            var process = new Process
+            var client = _httpClientFactory.CreateClient();
+
+            var baseUrl = $"{Request.Scheme}://{Request.Host}";
+
+            var formData = new Dictionary<string, string>
             {
-                StartInfo = new ProcessStartInfo
-                {
-                    FileName = "curl.exe",
-                    Arguments = $"-X POST http://localhost:5004/connect/token -H \"Content-Type: application/x-www-form-urlencoded\" -d \"client_id=bank.password&grant_type=password&username={request.Username}&password={request.Password}&scope=openid profile bank.api\"",
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true,
-                    UseShellExecute = false,
-                    CreateNoWindow = true
-                }
+                ["grant_type"]    = "password",
+                ["client_id"]     = "bank.client",
+                ["client_secret"] = "secret",
+                ["username"]      = request.Username,
+                ["password"]      = request.Password,
+                ["scope"]         = "openid profile email bank.api roles"
             };
 
-            process.Start();
-            var response = await process.StandardOutput.ReadToEndAsync();
-            var error = await process.StandardError.ReadToEndAsync();
+            var response = await client.PostAsync(
+                $"{baseUrl}/connect/token",
+                new FormUrlEncodedContent(formData));
 
-            if (!string.IsNullOrEmpty(error) && !error.Contains("Total"))
-            {
-                return BadRequest(error);
-            }
+            var body = await response.Content.ReadAsStringAsync();
 
-            return Ok(response);
+            if (!response.IsSuccessStatusCode)
+                return StatusCode((int)response.StatusCode, body);
+
+            // Extract access_token and return as plain string for backwards compatibility
+            var json = System.Text.Json.JsonDocument.Parse(body);
+            if (json.RootElement.TryGetProperty("access_token", out var tokenEl))
+                return Ok(tokenEl.GetString());
+
+            return Ok(body);
         }
     }
 

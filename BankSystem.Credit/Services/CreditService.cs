@@ -39,7 +39,10 @@ namespace BankSystem.Credit.Services
                 InterestRate = c.InterestRate,
                 StartDate = c.StartDate,
                 EndDate = c.EndDate,
-                Status = c.Status
+                Status = c.Status,
+                PaymentDueDate = c.PaymentDueDate,
+                DaysOverdue = c.DaysOverdue,
+                TermMonths = c.TermMonths
             });
         }
 
@@ -90,6 +93,8 @@ namespace BankSystem.Credit.Services
             if (!account.IsActive)
                 throw new InvalidOperationException("Account is not active");
 
+            var now = DateTime.UtcNow;
+            var termMonths = request.TermMonths > 0 ? request.TermMonths : 12;
             var credit = new Models.Credit
             {
                 Id = Guid.NewGuid(),
@@ -99,8 +104,10 @@ namespace BankSystem.Credit.Services
                 Amount = request.Amount,
                 RemainingAmount = request.Amount,
                 InterestRate = tariff.InterestRate,
-                StartDate = DateTime.UtcNow,
-                Status = "active"
+                StartDate = now,
+                Status = "active",
+                TermMonths = termMonths,
+                PaymentDueDate = now.AddMonths(termMonths)
             };
 
             _context.Credits.Add(credit);
@@ -117,7 +124,10 @@ namespace BankSystem.Credit.Services
                 InterestRate = credit.InterestRate,
                 StartDate = credit.StartDate,
                 EndDate = credit.EndDate,
-                Status = credit.Status
+                Status = credit.Status,
+                PaymentDueDate = credit.PaymentDueDate,
+                DaysOverdue = credit.DaysOverdue,
+                TermMonths = credit.TermMonths
             };
         }
 
@@ -187,7 +197,10 @@ namespace BankSystem.Credit.Services
                 InterestRate = c.InterestRate,
                 StartDate = c.StartDate,
                 EndDate = c.EndDate,
-                Status = c.Status
+                Status = c.Status,
+                PaymentDueDate = c.PaymentDueDate,
+                DaysOverdue = c.DaysOverdue,
+                TermMonths = c.TermMonths
             });
         }
 
@@ -265,16 +278,10 @@ namespace BankSystem.Credit.Services
 
             var now = DateTime.UtcNow;
 
-            // If current date is past due date and not paid, mark as Overdue
-            if (now > credit.PaymentDueDate && credit.Status != "Paid" && credit.Status != "Defaulted")
+            // If current date is past due date and not closed, mark as Overdue
+            if (now > credit.PaymentDueDate && credit.Status != "closed")
             {
                 credit.Status = "Overdue";
-            }
-
-            // If was Overdue but now has payment after due date, mark as Paid
-            if (credit.Status == "Overdue" && credit.LastPaymentDate.HasValue && credit.LastPaymentDate.Value > credit.PaymentDueDate)
-            {
-                credit.Status = "Paid";
             }
 
             await _context.SaveChangesAsync();

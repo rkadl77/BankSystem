@@ -39,8 +39,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddDbContext<CreditDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICreditTariffService, CreditTariffService>();
 builder.Services.AddScoped<ICreditService, CreditService>();
+builder.Services.AddHostedService<CreditStatusBackgroundService>();
 
 builder.Services.AddHttpClient<CoreServiceClient>();
 builder.Services.AddControllers();

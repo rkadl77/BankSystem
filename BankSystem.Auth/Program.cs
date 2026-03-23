@@ -68,6 +68,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("AllowAll");
+app.UseDefaultFiles();
+app.UseStaticFiles();
 app.UseIdentityServer();
 app.MapControllers();
 app.Run();

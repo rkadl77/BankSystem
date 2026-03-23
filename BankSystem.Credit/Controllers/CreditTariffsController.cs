@@ -5,7 +5,7 @@ using BankSystem.Credit.Services;
 
 namespace BankSystem.Credit.Controllers
 {
-    [Authorize(Roles = "admin,employee")]
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class CreditTariffsController : ControllerBase
@@ -73,6 +73,7 @@ namespace BankSystem.Credit.Controllers
         /// <response code="201">Returns the newly created tariff.</response>
         /// <response code="401">Unauthorized.</response>
         /// <response code="403">Forbidden.</response>
+        [Authorize(Roles = "admin,employee")]
         [HttpPost]
         [ProducesResponseType(typeof(CreditTariffDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -91,6 +92,7 @@ namespace BankSystem.Credit.Controllers
         /// <response code="404">If the tariff is not found.</response>
         /// <response code="401">Unauthorized.</response>
         /// <response code="403">Forbidden.</response>
+        [Authorize(Roles = "admin,employee")]
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(CreditTariffDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -111,6 +113,7 @@ namespace BankSystem.Credit.Controllers
         /// <response code="404">If the tariff is not found.</response>
         /// <response code="401">Unauthorized.</response>
         /// <response code="403">Forbidden.</response>
+        [Authorize(Roles = "admin,employee")]
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

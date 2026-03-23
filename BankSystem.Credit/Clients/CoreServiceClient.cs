@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Net.Http.Headers;
+using System.Text;
 using System.Text.Json;
 using BankSystem.Credit.DTOs;
 
@@ -8,18 +9,31 @@ namespace BankSystem.Credit.Clients
     {
         private readonly HttpClient _httpClient;
         private readonly ILogger<CoreServiceClient> _logger;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public CoreServiceClient(HttpClient httpClient, ILogger<CoreServiceClient> logger)
+        public CoreServiceClient(HttpClient httpClient, ILogger<CoreServiceClient> logger, IHttpContextAccessor httpContextAccessor)
         {
             _httpClient = httpClient;
             _logger = logger;
-            _httpClient.BaseAddress = new Uri("http://localhost:5001");
+            _httpContextAccessor = httpContextAccessor;
+            _httpClient.BaseAddress = new Uri("http://localhost:5116");
+        }
+
+        private void ForwardAuthHeader()
+        {
+            var authHeader = _httpContextAccessor.HttpContext?.Request.Headers["Authorization"].FirstOrDefault();
+            if (!string.IsNullOrEmpty(authHeader) && authHeader.StartsWith("Bearer "))
+            {
+                _httpClient.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Bearer", authHeader["Bearer ".Length..]);
+            }
         }
 
         public async Task<AccountDto?> GetAccountAsync(Guid accountId)
         {
             try
             {
+                ForwardAuthHeader();
                 var response = await _httpClient.GetAsync($"/api/accounts/{accountId}");
                 if (response.IsSuccessStatusCode)
                 {
@@ -38,6 +52,7 @@ namespace BankSystem.Credit.Clients
         {
             try
             {
+                ForwardAuthHeader();
                 var response = await _httpClient.GetAsync($"/api/accounts/{accountId}/balance");
                 if (response.IsSuccessStatusCode)
                 {
@@ -71,6 +86,7 @@ namespace BankSystem.Credit.Clients
                     Description = description
                 };
 
+                ForwardAuthHeader();
                 var content = new StringContent(
                     JsonSerializer.Serialize(request),
                     Encoding.UTF8,
