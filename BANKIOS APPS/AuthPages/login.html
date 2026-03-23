@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>BankApp — Вход</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold:    #C9A84C;
+      --gold-lt: #E8C96A;
+      --bg:      #0A1628;
+      --card:    #111E33;
+      --surface: #1A2B47;
+      --border:  #243550;
+      --text:    #F0F4FF;
+      --muted:   #6B7FA3;
+      --danger:  #FF5A5A;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: var(--text);
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 24px 16px;
+    }
+
+    /* ── Logo ── */
+    .logo {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .logo-icon {
+      width: 72px; height: 72px;
+      background: rgba(201,168,76,.12);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 12px;
+      font-size: 32px;
+    }
+    .logo h1 {
+      font-size: 26px; font-weight: 700; letter-spacing: -.5px;
+    }
+    .logo p {
+      font-size: 14px; color: var(--muted); margin-top: 4px;
+    }
+
+    /* ── Card ── */
+    .card {
+      width: 100%; max-width: 400px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px 24px;
+    }
+    .card-title {
+      font-size: 20px; font-weight: 700; margin-bottom: 4px;
+    }
+    .card-sub {
+      font-size: 13px; color: var(--muted); margin-bottom: 24px;
+    }
+
+    /* ── Form ── */
+    .field { margin-bottom: 16px; }
+    label {
+      display: block;
+      font-size: 11px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: .4px; color: var(--muted);
+      margin-bottom: 6px;
+    }
+    input {
+      display: block; width: 100%;
+      padding: 12px 14px;
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 16px; color: var(--text);
+      outline: none;
+      transition: border-color .15s;
+      -webkit-appearance: none;
+    }
+    input:focus { border-color: var(--gold); }
+    input::placeholder { color: var(--muted); }
+
+    /* ── Error ── */
+    .error-box {
+      display: none;
+      background: rgba(255,90,90,.1);
+      border: 1px solid rgba(255,90,90,.3);
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 13px; color: var(--danger);
+      margin-bottom: 14px;
+    }
+
+    /* ── Buttons ── */
+    .btn {
+      display: flex; align-items: center; justify-content: center;
+      gap: 8px;
+      width: 100%; padding: 14px;
+      border: none; border-radius: 12px;
+      font-size: 16px; font-weight: 600;
+      cursor: pointer;
+      transition: opacity .15s;
+      -webkit-appearance: none;
+    }
+    .btn:disabled { opacity: .5; cursor: default; }
+    .btn-primary { background: var(--gold); color: #000; margin-bottom: 10px; }
+    .btn-primary:hover:not(:disabled) { background: var(--gold-lt); }
+    .btn-secondary {
+      background: rgba(201,168,76,.1);
+      color: var(--gold);
+      border: 1px solid rgba(201,168,76,.25);
+      font-size: 14px; font-weight: 500;
+    }
+
+    /* ── Spinner ── */
+    .spinner {
+      width: 18px; height: 18px;
+      border: 2px solid rgba(0,0,0,.2);
+      border-top-color: #000;
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+      display: none;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Security note ── */
+    .security {
+      margin-top: 20px;
+      font-size: 12px; color: var(--muted);
+      text-align: center; line-height: 1.5;
+    }
+    .security svg { vertical-align: -2px; margin-right: 4px; }
+  </style>
+</head>
+<body>
+
+  <div class="logo">
+    <div class="logo-icon">🏦</div>
+    <h1>BankApp</h1>
+    <p>Сервис аутентификации</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Вход</div>
+    <div class="card-sub">Введите данные вашего аккаунта</div>
+
+    <form id="loginForm">
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email"
+               autocomplete="username"
+               placeholder="example@mail.ru" required>
+      </div>
+
+      <div class="field">
+        <label for="password">Пароль</label>
+        <input type="password" id="password" name="password"
+               autocomplete="current-password"
+               placeholder="••••••••" required>
+      </div>
+
+      <div class="error-box" id="errorBox"></div>
+
+      <button type="submit" class="btn btn-primary" id="loginBtn">
+        <div class="spinner" id="spinner"></div>
+        <span id="btnText">Войти</span>
+      </button>
+    </form>
+
+    <a href="register.html" id="registerLink"
+       style="text-decoration:none; display:block;">
+      <button type="button" class="btn btn-secondary">
+        Зарегистрироваться
+      </button>
+    </a>
+  </div>
+
+  <div class="security">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+         stroke="currentColor" stroke-width="2">
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+    </svg>
+    Пароль передаётся напрямую в сервис аутентификации и нигде не сохраняется
+  </div>
+
+  <script>
+    // Считываем redirect_uri из URL страницы
+    const params = new URLSearchParams(window.location.search);
+    const redirectUri = params.get('redirect_uri') || '';
+
+    // Если redirect_uri есть, ставим его на кнопку регистрации
+    if (redirectUri) {
+      const link = document.getElementById('registerLink');
+      link.href = 'register.html?redirect_uri=' + encodeURIComponent(redirectUri);
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const btn     = document.getElementById('loginBtn');
+      const spinner = document.getElementById('spinner');
+      const btnText = document.getElementById('btnText');
+      const errBox  = document.getElementById('errorBox');
+
+      btn.disabled = true;
+      spinner.style.display = 'block';
+      btnText.textContent = 'Входим…';
+      errBox.style.display = 'none';
+
+      try {
+        const resp = await fetch('http://localhost:5109/api/Token', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username: document.getElementById('email').value.trim(),
+            password: document.getElementById('password').value
+          })
+        });
+
+        if (!resp.ok) {
+          const msg = resp.status === 401
+            ? 'Неверный email или пароль'
+            : 'Ошибка сервера (' + resp.status + ')';
+          showError(msg);
+          return;
+        }
+
+        const raw = await resp.text();
+        let token;
+        try {
+          const data = JSON.parse(raw);
+          token = data.token || data;
+        } catch (_) {
+          token = raw.replace(/^"|"$/g, '');
+        }
+
+        // Редирект обратно в приложение — ASWebAuthenticationSession перехватит его
+        if (redirectUri) {
+          window.location.href = redirectUri + '?token=' + encodeURIComponent(token);
+        }
+
+      } catch (err) {
+        showError('Нет соединения с сервером авторизации');
+      }
+    });
+
+    function showError(msg) {
+      const btn     = document.getElementById('loginBtn');
+      const spinner = document.getElementById('spinner');
+      const btnText = document.getElementById('btnText');
+      const errBox  = document.getElementById('errorBox');
+      errBox.textContent = msg;
+      errBox.style.display = 'block';
+      btn.disabled = false;
+      spinner.style.display = 'none';
+      btnText.textContent = 'Войти';
+    }
+  </script>
+
+</body>
+</html>
