@@ -1,0 +1,6 @@
+@BankSystem.Monitoring_HostAddress = http://localhost:5030
+
+GET {{BankSystem.Monitoring_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

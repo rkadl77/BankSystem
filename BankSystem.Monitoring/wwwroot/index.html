@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BankSystem Monitoring Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f7fa;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            color: #7f8c8d;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .stat-card .value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .chart-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .chart-container h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .table-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow-x: auto;
+        }
+
+        .table-container h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        th {
+            background: #3498db;
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .status-ok {
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        .status-error {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        .refresh-info {
+            text-align: center;
+            color: #7f8c8d;
+            margin-top: 20px;
+            font-size: 0.9em;
+        }
+
+        canvas {
+            max-height: 350px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 BankSystem Monitoring Dashboard</h1>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Total Requests</h3>
+                <div class="value" id="totalRequests">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Error Rate</h3>
+                <div class="value" id="errorRate">0%</div>
+            </div>
+            <div class="stat-card">
+                <h3>Avg Duration</h3>
+                <div class="value" id="avgDuration">0ms</div>
+            </div>
+            <div class="stat-card">
+                <h3>Services</h3>
+                <div class="value" id="serviceCount">0</div>
+            </div>
+        </div>
+
+        <div class="charts-grid">
+            <div class="chart-container">
+                <h2>Requests Per Minute (Last 30 min)</h2>
+                <canvas id="requestsChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <h2>Error Rate Over Time</h2>
+                <canvas id="errorChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <h2>Avg Response Time Per Service</h2>
+                <canvas id="serviceChart"></canvas>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <h2>Last 20 Requests</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Trace ID</th>
+                        <th>Service</th>
+                        <th>Method</th>
+                        <th>Path</th>
+                        <th>Status</th>
+                        <th>Duration</th>
+                        <th>Timestamp</th>
+                    </tr>
+                </thead>
+                <tbody id="logsTable">
+                </tbody>
+            </table>
+        </div>
+
+        <div class="refresh-info">
+            Auto-refreshing every 10 seconds • Last updated: <span id="lastUpdate">-</span>
+        </div>
+    </div>
+
+    <script>
+        // Chart instances
+        let requestsChartInstance = null;
+        let errorChartInstance = null;
+        let serviceChartInstance = null;
+
+        // Fetch and update dashboard
+        async function updateDashboard() {
+            try {
+                const [statsResponse, logsResponse] = await Promise.all([
+                    fetch('/api/logs/stats'),
+                    fetch('/api/logs?from=' + new Date(Date.now() - 30 * 60 * 1000).toISOString())
+                ]);
+
+                const stats = await statsResponse.json();
+                const logs = await logsResponse.json();
+
+                // Update stat cards
+                document.getElementById('totalRequests').textContent = stats.totalRequests;
+                document.getElementById('errorRate').textContent = stats.errorRate + '%';
+                document.getElementById('avgDuration').textContent = Math.round(stats.avgDurationMs) + 'ms';
+                document.getElementById('serviceCount').textContent = stats.perService.length;
+
+                // Update charts
+                updateRequestsChart(logs);
+                updateErrorChart(logs);
+                updateServiceChart(stats.perService);
+                updateTable(logs.slice(0, 20));
+
+                document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString();
+            } catch (error) {
+                console.error('Error updating dashboard:', error);
+            }
+        }
+
+        function updateRequestsChart(logs) {
+            const timeBuckets = {};
+            const now = Date.now();
+            
+            for (let i = 0; i < 30; i++) {
+                const time = new Date(now - (29 - i) * 60 * 1000);
+                const key = time.getHours().toString().padStart(2, '0') + ':' + 
+                           time.getMinutes().toString().padStart(2, '0');
+                timeBuckets[key] = 0;
+            }
+
+            logs.forEach(log => {
+                const time = new Date(log.timestamp);
+                const key = time.getHours().toString().padStart(2, '0') + ':' + 
+                           time.getMinutes().toString().padStart(2, '0');
+                if (timeBuckets[key] !== undefined) {
+                    timeBuckets[key]++;
+                }
+            });
+
+            const labels = Object.keys(timeBuckets);
+            const data = Object.values(timeBuckets);
+
+            if (requestsChartInstance) {
+                requestsChartInstance.data.labels = labels;
+                requestsChartInstance.data.datasets[0].data = data;
+                requestsChartInstance.update();
+            } else {
+                const ctx = document.getElementById('requestsChart').getContext('2d');
+                requestsChartInstance = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Requests',
+                            data: data,
+                            borderColor: '#3498db',
+                            backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            y: { beginAtZero: true }
+                        }
+                    }
+                });
+            }
+        }
+
+        function updateErrorChart(logs) {
+            const timeBuckets = {};
+            const now = Date.now();
+            
+            for (let i = 0; i < 30; i++) {
+                const time = new Date(now - (29 - i) * 60 * 1000);
+                const key = time.getHours().toString().padStart(2, '0') + ':' + 
+                           time.getMinutes().toString().padStart(2, '0');
+                timeBuckets[key] = { total: 0, errors: 0 };
+            }
+
+            logs.forEach(log => {
+                const time = new Date(log.timestamp);
+                const key = time.getHours().toString().padStart(2, '0') + ':' + 
+                           time.getMinutes().toString().padStart(2, '0');
+                if (timeBuckets[key]) {
+                    timeBuckets[key].total++;
+                    if (log.isError) timeBuckets[key].errors++;
+                }
+            });
+
+            const labels = Object.keys(timeBuckets);
+            const data = labels.map(key => {
+                const bucket = timeBuckets[key];
+                return bucket.total > 0 ? (bucket.errors / bucket.total * 100).toFixed(2) : 0;
+            });
+
+            if (errorChartInstance) {
+                errorChartInstance.data.labels = labels;
+                errorChartInstance.data.datasets[0].data = data;
+                errorChartInstance.update();
+            } else {
+                const ctx = document.getElementById('errorChart').getContext('2d');
+                errorChartInstance = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Error Rate (%)',
+                            data: data,
+                            borderColor: '#e74c3c',
+                            backgroundColor: 'rgba(231, 76, 60, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            y: { 
+                                beginAtZero: true,
+                                max: 100
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        function updateServiceChart(services) {
+            const labels = services.map(s => s.service);
+            const data = services.map(s => Math.round(s.avgDuration));
+
+            if (serviceChartInstance) {
+                serviceChartInstance.data.labels = labels;
+                serviceChartInstance.data.datasets[0].data = data;
+                serviceChartInstance.update();
+            } else {
+                const ctx = document.getElementById('serviceChart').getContext('2d');
+                serviceChartInstance = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Avg Duration (ms)',
+                            data: data,
+                            backgroundColor: [
+                                '#3498db',
+                                '#2ecc71',
+                                '#e74c3c',
+                                '#f39c12',
+                                '#9b59b6',
+                                '#1abc9c'
+                            ]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            y: { beginAtZero: true }
+                        }
+                    }
+                });
+            }
+        }
+
+        function updateTable(logs) {
+            const tbody = document.getElementById('logsTable');
+            tbody.innerHTML = logs.map(log => `
+                <tr>
+                    <td>${log.traceId.substring(0, 8)}...</td>
+                    <td>${log.service}</td>
+                    <td>${log.method}</td>
+                    <td>${log.path}</td>
+                    <td class="${log.statusCode < 400 ? 'status-ok' : 'status-error'}">${log.statusCode}</td>
+                    <td>${log.durationMs}ms</td>
+                    <td>${new Date(log.timestamp).toLocaleString()}</td>
+                </tr>
+            `).join('');
+        }
+
+        // Initial load and auto-refresh
+        updateDashboard();
+        setInterval(updateDashboard, 10000);
+    </script>
+</body>
+</html>
