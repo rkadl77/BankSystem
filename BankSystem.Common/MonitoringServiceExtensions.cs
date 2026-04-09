@@ -29,4 +29,13 @@ public static class MonitoringServiceExtensions
     {
         return app.UseMiddleware<TracingMiddleware>();
     }
+
+    /// <summary>
+    /// Use the ChaosMiddleware (simulates random failures)
+    /// Should be called after authentication but before MapControllers
+    /// </summary>
+    public static IApplicationBuilder UseChaosEngineering(this IApplicationBuilder app)
+    {
+        return app.UseMiddleware<ChaosMiddleware>();
+    }
 }

@@ -149,5 +149,12 @@ app.UseWebSockets();
 app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
+
+// Chaos engineering - simulates random failures
+app.UseChaosEngineering();
+
+// Health endpoint
+app.MapGet("/health", () => Results.Ok(new { status = "healthy", timestamp = DateTime.UtcNow }));
+
 app.MapControllers();
 app.Run();
