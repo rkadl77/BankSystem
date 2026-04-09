@@ -42,12 +42,20 @@ builder.Services.AddDbContext<UsersDbContext>(options =>
 
 builder.Services.AddHttpClient<UserService>(client => {
     client.BaseAddress = new Uri("http://localhost:5109/");
-});
+})
+.AddPolicyHandler(PollyPolicies.GetRetryPolicy("BankSystem.Auth"))
+.AddPolicyHandler(PollyPolicies.GetCircuitBreakerPolicy("BankSystem.Auth"));
+
 builder.Services.AddScoped<IUserService>(sp => sp.GetRequiredService<UserService>());
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 
-builder.Services.AddHttpClient<CoreServiceClient>();
-builder.Services.AddHttpClient<CreditServiceClient>();
+builder.Services.AddHttpClient<CoreServiceClient>()
+    .AddPolicyHandler(PollyPolicies.GetRetryPolicy("BankSystem"))
+    .AddPolicyHandler(PollyPolicies.GetCircuitBreakerPolicy("BankSystem"));
+
+builder.Services.AddHttpClient<CreditServiceClient>()
+    .AddPolicyHandler(PollyPolicies.GetRetryPolicy("BankSystem.Credit"))
+    .AddPolicyHandler(PollyPolicies.GetCircuitBreakerPolicy("BankSystem.Credit"));
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>

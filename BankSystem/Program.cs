@@ -48,11 +48,20 @@ builder.Services.AddScoped<IMasterAccountService, MasterAccountService>();
 builder.Services.AddSingleton<WebSocketHandler>();
 builder.Services.AddScoped<ICurrencyExchangeService, CurrencyExchangeService>();
 
-builder.Services.AddHttpClient<IUserServiceClient, UserServiceClient>();
-builder.Services.AddHttpClient<CurrencyExchangeService>();
+// Add Polly policies to all HttpClient registrations
+builder.Services.AddHttpClient<IUserServiceClient, UserServiceClient>()
+    .AddPolicyHandler(PollyPolicies.GetRetryPolicy("BankSystem.Users"))
+    .AddPolicyHandler(PollyPolicies.GetCircuitBreakerPolicy("BankSystem.Users"));
+
+builder.Services.AddHttpClient<CurrencyExchangeService>()
+    .AddPolicyHandler(PollyPolicies.GetRetryPolicy("CurrencyExchange"))
+    .AddPolicyHandler(PollyPolicies.GetCircuitBreakerPolicy("CurrencyExchange"));
+
 builder.Services.AddMemoryCache();
 
-builder.Services.AddHttpClient<UserRoleService>();
+builder.Services.AddHttpClient<UserRoleService>()
+    .AddPolicyHandler(PollyPolicies.GetRetryPolicy("UserRole"))
+    .AddPolicyHandler(PollyPolicies.GetCircuitBreakerPolicy("UserRole"));
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>

@@ -43,7 +43,9 @@ builder.Services.AddDbContext<CreditDbContext>(options =>
 builder.Services.AddScoped<ICreditTariffService, CreditTariffService>();
 builder.Services.AddScoped<ICreditService, CreditService>();
 
-builder.Services.AddHttpClient<CoreServiceClient>();
+builder.Services.AddHttpClient<CoreServiceClient>()
+    .AddPolicyHandler(PollyPolicies.GetRetryPolicy("BankSystem"))
+    .AddPolicyHandler(PollyPolicies.GetCircuitBreakerPolicy("BankSystem"));
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
