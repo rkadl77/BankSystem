@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>BankApp — Регистрация сотрудника</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold:    #C9A84C;
+      --gold-lt: #E8C96A;
+      --bg:      #0A1628;
+      --card:    #111E33;
+      --surface: #1A2B47;
+      --border:  #243550;
+      --text:    #F0F4FF;
+      --muted:   #6B7FA3;
+      --danger:  #FF5A5A;
+      --success: #34C759;
+    }
+
+    html, body {
+      background: var(--bg);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: var(--text);
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 16px 40px;
+      min-height: 100vh;
+    }
+
+    /* -- Logo -- */
+    .logo {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .logo-icon {
+      width: 64px; height: 64px;
+      background: rgba(201,168,76,.12);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 10px;
+      font-size: 28px;
+    }
+    .logo h1 { font-size: 24px; font-weight: 700; }
+    .logo p  { font-size: 13px; color: var(--muted); margin-top: 3px; }
+
+    /* -- Card -- */
+    .card {
+      width: 100%; max-width: 400px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px 24px;
+    }
+    .card-title { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+    .card-sub   { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+
+    /* -- Fields -- */
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .field { margin-bottom: 14px; }
+    label {
+      display: block;
+      font-size: 11px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: .4px; color: var(--muted);
+      margin-bottom: 5px;
+    }
+    input {
+      display: block; width: 100%;
+      padding: 11px 13px;
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 15px; color: var(--text);
+      outline: none;
+      transition: border-color .15s;
+      -webkit-appearance: none;
+    }
+    input:focus { border-color: var(--gold); }
+    input::placeholder { color: var(--muted); }
+
+    /* -- Password strength -- */
+    .strength-bar {
+      height: 3px; border-radius: 2px;
+      background: var(--border);
+      margin-top: 6px; overflow: hidden;
+    }
+    .strength-fill {
+      height: 100%; border-radius: 2px;
+      width: 0; transition: width .3s, background .3s;
+    }
+    .strength-label {
+      font-size: 11px; color: var(--muted);
+      margin-top: 4px; min-height: 14px;
+    }
+
+    /* -- Error / Success -- */
+    .error-box, .success-box {
+      display: none;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 13px;
+      margin-bottom: 14px;
+    }
+    .error-box {
+      background: rgba(255,90,90,.1);
+      border: 1px solid rgba(255,90,90,.3);
+      color: var(--danger);
+    }
+    .success-box {
+      background: rgba(52,199,89,.08);
+      border: 1px solid rgba(52,199,89,.25);
+      color: var(--success);
+    }
+
+    /* -- Buttons -- */
+    .btn {
+      display: flex; align-items: center; justify-content: center;
+      gap: 8px; width: 100%; padding: 14px;
+      border: none; border-radius: 12px;
+      font-size: 16px; font-weight: 600;
+      cursor: pointer; -webkit-appearance: none;
+      transition: opacity .15s;
+    }
+    .btn:disabled { opacity: .5; cursor: default; }
+    .btn-primary { background: var(--gold); color: #000; margin-bottom: 10px; }
+    .btn-primary:hover:not(:disabled) { background: var(--gold-lt); }
+    .btn-secondary {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      font-size: 14px; font-weight: 400;
+    }
+
+    .spinner {
+      width: 18px; height: 18px;
+      border: 2px solid rgba(0,0,0,.2);
+      border-top-color: #000;
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+      display: none;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .divider {
+      border: none; border-top: 1px solid var(--border);
+      margin: 20px 0;
+    }
+
+    .security {
+      margin-top: 20px; max-width: 400px;
+      font-size: 12px; color: var(--muted);
+      text-align: center; line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="logo">
+    <div class="logo-icon">&#127974;</div>
+    <h1>BankApp</h1>
+    <p>Сервис аутентификации</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Регистрация сотрудника</div>
+    <div class="card-sub">Создайте аккаунт сотрудника банка</div>
+
+    <form id="regForm">
+      <div class="row">
+        <div class="field">
+          <label for="firstName">Имя</label>
+          <input type="text" id="firstName" autocomplete="given-name"
+                 placeholder="Иван" required>
+        </div>
+        <div class="field">
+          <label for="lastName">Фамилия</label>
+          <input type="text" id="lastName" autocomplete="family-name"
+                 placeholder="Иванов" required>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" id="email" autocomplete="username"
+               placeholder="example@mail.ru" required>
+      </div>
+
+      <div class="field">
+        <label for="phone">Телефон</label>
+        <input type="tel" id="phone" autocomplete="tel"
+               placeholder="+7 900 000-00-00" required>
+      </div>
+
+      <div class="field">
+        <label for="password">Пароль</label>
+        <input type="password" id="password" autocomplete="new-password"
+               placeholder="Минимум 6 символов" required
+               oninput="updateStrength(this.value)">
+        <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
+        <div class="strength-label" id="strengthLabel"></div>
+      </div>
+
+      <div class="field">
+        <label for="confirm">Подтверждение пароля</label>
+        <input type="password" id="confirm" autocomplete="new-password"
+               placeholder="Повторите пароль" required>
+      </div>
+
+      <div class="error-box"   id="errorBox"></div>
+      <div class="success-box" id="successBox"></div>
+
+      <button type="submit" class="btn btn-primary" id="regBtn">
+        <div class="spinner" id="spinner"></div>
+        <span id="btnText">Создать аккаунт</span>
+      </button>
+    </form>
+
+    <hr class="divider">
+
+    <a href="login.html" id="loginLink" style="text-decoration:none; display:block;">
+      <button type="button" class="btn btn-secondary">
+        Уже есть аккаунт? Войти
+      </button>
+    </a>
+  </div>
+
+  <div class="security">
+    &#128274; Пароль передаётся напрямую в сервис аутентификации и нигде не сохраняется
+  </div>
+
+  <script>
+    const params      = new URLSearchParams(window.location.search);
+    const redirectUri = params.get('redirect_uri') || '';
+
+    if (redirectUri) {
+      document.getElementById('loginLink').href =
+        'login.html?redirect_uri=' + encodeURIComponent(redirectUri);
+    }
+
+    // -- Password strength --
+    function updateStrength(val) {
+      const fill  = document.getElementById('strengthFill');
+      const label = document.getElementById('strengthLabel');
+      let score = 0;
+      if (val.length >= 6)  score++;
+      if (val.length >= 10) score++;
+      if (/[A-Z]/.test(val)) score++;
+      if (/[0-9]/.test(val)) score++;
+      if (/[^A-Za-z0-9]/.test(val)) score++;
+
+      const levels = [
+        { w: '0%',   bg: 'transparent', txt: '' },
+        { w: '25%',  bg: '#FF5A5A',     txt: 'Слабый' },
+        { w: '50%',  bg: '#FF9500',     txt: 'Средний' },
+        { w: '75%',  bg: '#C9A84C',     txt: 'Хороший' },
+        { w: '100%', bg: '#34C759',     txt: 'Надёжный' },
+      ];
+      const lvl = Math.min(score, 4);
+      fill.style.width      = levels[lvl].w;
+      fill.style.background = levels[lvl].bg;
+      label.textContent     = levels[lvl].txt;
+      label.style.color     = levels[lvl].bg;
+    }
+
+    // -- Registration --
+    document.getElementById('regForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const btn     = document.getElementById('regBtn');
+      const spinner = document.getElementById('spinner');
+      const btnText = document.getElementById('btnText');
+      const errBox  = document.getElementById('errorBox');
+      const okBox   = document.getElementById('successBox');
+
+      const password = document.getElementById('password').value;
+      const confirm  = document.getElementById('confirm').value;
+
+      errBox.style.display = 'none';
+      okBox.style.display  = 'none';
+
+      if (password !== confirm) {
+        showError('Пароли не совпадают'); return;
+      }
+      if (password.length < 6) {
+        showError('Пароль должен быть не менее 6 символов'); return;
+      }
+
+      btn.disabled = true;
+      spinner.style.display = 'block';
+      btnText.textContent = 'Регистрация…';
+
+      try {
+        // 1. Register employee via UsersService
+        const regResp = await fetch('http://localhost:5276/api/Users/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            firstName: document.getElementById('firstName').value.trim(),
+            lastName:  document.getElementById('lastName').value.trim(),
+            email:     document.getElementById('email').value.trim(),
+            phone:     document.getElementById('phone').value.trim(),
+            password:  password,
+            role:      'employee'
+          })
+        });
+
+        if (!regResp.ok) {
+          let msg = 'Ошибка регистрации (' + regResp.status + ')';
+          try {
+            const data = await regResp.json();
+            if (data.title)   msg = data.title;
+            if (data.message) msg = data.message;
+            if (data.errors) {
+              const errs = Object.values(data.errors).flat();
+              if (errs.length) msg = errs[0];
+            }
+          } catch (_) {}
+          showError(msg); return;
+        }
+
+        // 2. Get token via Auth service
+        btnText.textContent = 'Выполняем вход…';
+        const tokenResp = await fetch('/api/Token', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username: document.getElementById('email').value.trim(),
+            password: password
+          })
+        });
+
+        if (!tokenResp.ok) {
+          // Account created but login failed (e.g. needs admin activation)
+          okBox.textContent = 'Аккаунт создан. Закройте это окно и ожидайте активации администратором.';
+          okBox.style.display = 'block';
+          btn.disabled = false;
+          spinner.style.display = 'none';
+          btnText.textContent = 'Создать аккаунт';
+          return;
+        }
+
+        const raw = await tokenResp.text();
+        let token;
+        try {
+          const data = JSON.parse(raw);
+          token = data.token || data;
+        } catch (_) {
+          token = raw.replace(/^"|"$/g, '');
+        }
+
+        // 3. Redirect back to app
+        if (redirectUri) {
+          window.location.href = redirectUri + '?token=' + encodeURIComponent(token);
+        } else {
+          okBox.textContent = 'Аккаунт успешно создан!';
+          okBox.style.display = 'block';
+          btn.disabled = false;
+          spinner.style.display = 'none';
+          btnText.textContent = 'Создать аккаунт';
+        }
+
+      } catch (err) {
+        showError('Нет соединения с сервером');
+      }
+    });
+
+    function showError(msg) {
+      const btn     = document.getElementById('regBtn');
+      const spinner = document.getElementById('spinner');
+      const btnText = document.getElementById('btnText');
+      const errBox  = document.getElementById('errorBox');
+      errBox.textContent = msg;
+      errBox.style.display = 'block';
+      btn.disabled = false;
+      spinner.style.display = 'none';
+      btnText.textContent = 'Создать аккаунт';
+    }
+  </script>
+
+</body>
+</html>
