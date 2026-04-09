@@ -30,6 +30,7 @@ artifacts/
 *.snk
 *.pfx
 *.p7s
+*.dll
 
 # Visual Studio files
 .vs/
