@@ -1,7 +1,10 @@
-# .NET build outputs
-bin/
-obj/
-out/
+# .NET build outputs (recursive for all microservices)
+*/bin/
+*/obj/
+*/out/
+**/bin/
+**/obj/
+**/out/
 artifacts/
 
 # User-specific files
@@ -76,6 +79,7 @@ logs/
 
 # Publish output
 /publish/
+**/publish/
 
 # IDE specific
 _ReSharper.Caches/
@@ -95,8 +99,6 @@ Desktop.ini
 # Docker
 .dockerignore
 
-#*/Migrations/
-
 # Code coverage
 coverage/
 *.coverage
@@ -107,3 +109,5 @@ coverage/
 # Build artifacts
 /build/
 /dist/
+**/build/
+**/dist/
