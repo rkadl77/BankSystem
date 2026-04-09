@@ -1,6 +1,7 @@
 using BankSystem.Auth.Config;
 using BankSystem.Auth.Data;
 using BankSystem.Auth.Services;
+using BankSystem.Common;
 using Duende.IdentityServer;
 using Duende.IdentityServer.Services;
 using Microsoft.EntityFrameworkCore;
@@ -53,6 +54,9 @@ builder.Services.AddCors(options =>
 });
 builder.Services.AddHttpClient();
 
+// Add monitoring and tracing
+builder.Services.AddBankSystemMonitoring();
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -67,6 +71,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// Tracing middleware MUST be first in pipeline
+app.UseBankSystemTracing();
 app.UseCors("AllowAll");
 app.UseIdentityServer();
 app.MapControllers();

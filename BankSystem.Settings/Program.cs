@@ -1,5 +1,6 @@
 using BankSystem.Settings.Data;
 using BankSystem.Settings.Services;
+using BankSystem.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -77,6 +78,9 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+// Add monitoring and tracing
+builder.Services.AddBankSystemMonitoring();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -86,6 +90,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// Tracing middleware MUST be first in pipeline
+app.UseBankSystemTracing();
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();

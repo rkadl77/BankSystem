@@ -1,6 +1,7 @@
 using BankSystem.Users.Clients;
 using BankSystem.Users.Data;
 using BankSystem.Users.Services;
+using BankSystem.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -94,6 +95,9 @@ builder.Services.AddCors(options =>
     });
 });
 
+// Add monitoring and tracing
+builder.Services.AddBankSystemMonitoring();
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -108,6 +112,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// Tracing middleware MUST be first in pipeline
+app.UseBankSystemTracing();
 app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
