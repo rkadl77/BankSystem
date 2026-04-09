@@ -159,6 +159,9 @@ app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
 
+// Idempotency - BEFORE ChaosMiddleware
+app.UseIdempotency();
+
 // Chaos engineering - simulates random failures
 app.UseChaosEngineering();
 

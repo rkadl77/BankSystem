@@ -46,6 +46,8 @@ builder.Services.AddScoped<ICreditService, CreditService>();
 builder.Services.AddHttpClient<CoreServiceClient>()
     .AddPolicyHandler(PollyPolicies.GetRetryPolicy("BankSystem"))
     .AddPolicyHandler(PollyPolicies.GetCircuitBreakerPolicy("BankSystem"));
+
+builder.Services.AddMemoryCache();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -115,6 +117,9 @@ app.UseBankSystemTracing();
 app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
+
+// Idempotency - BEFORE ChaosMiddleware
+app.UseIdempotency();
 
 // Chaos engineering - simulates random failures
 app.UseChaosEngineering();

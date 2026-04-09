@@ -38,4 +38,13 @@ public static class MonitoringServiceExtensions
     {
         return app.UseMiddleware<ChaosMiddleware>();
     }
+
+    /// <summary>
+    /// Use the IdempotencyMiddleware (caches responses for duplicate requests)
+    /// Should be called before ChaosMiddleware
+    /// </summary>
+    public static IApplicationBuilder UseIdempotency(this IApplicationBuilder app)
+    {
+        return app.UseMiddleware<IdempotencyMiddleware>();
+    }
 }
