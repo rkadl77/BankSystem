@@ -64,8 +64,8 @@ namespace BankSystem.Services
                 throw new InvalidOperationException($"Client with id {request.ClientId} does not exist");
 
             var masterExists = await _context.Accounts.AnyAsync(a => a.IsMasterAccount);
-            if (masterExists)
-                throw new InvalidOperationException("Master account already exists");
+            if (!masterExists)
+                throw new InvalidOperationException("Cannot create account: Master account (bank) does not exist yet");
 
             var account = new Account
             {

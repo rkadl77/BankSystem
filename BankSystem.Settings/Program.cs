@@ -52,6 +52,9 @@ builder.Services.AddSwaggerGen(c =>
     c.IncludeXmlComments(xmlPath);
     c.SchemaFilter<BankSystem.Settings.SwaggerExamples>();
 
+    // Resolve conflicting actions (e.g., duplicate health endpoints)
+    c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
+
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",

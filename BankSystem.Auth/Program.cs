@@ -5,6 +5,7 @@ using BankSystem.Common;
 using Duende.IdentityServer;
 using Duende.IdentityServer.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,7 +44,13 @@ builder.Services.AddIdentityServer()
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "AuthService API", Version = "v1", Description = "Authentication and Authorization API" });
+
+    // Resolve conflicting actions (e.g., duplicate health endpoints)
+    c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
+});
 
 builder.Services.AddCors(options =>
 {

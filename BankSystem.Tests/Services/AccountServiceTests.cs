@@ -111,7 +111,7 @@ namespace BankSystem.Tests.Services
         #region CreateAccountAsync Tests
 
         [Fact]
-        public async Task CreateAccountAsync_WhenMasterAccountAlreadyExists_ThrowsInvalidOperationException()
+        public async Task CreateAccountAsync_WhenMasterAccountExists_CreatesAccountSuccessfully()
         {
             // Arrange
             var context = GetInMemoryContext();
@@ -130,6 +130,33 @@ namespace BankSystem.Tests.Services
             await context.SaveChangesAsync();
 
             var service = GetService(context);
+            var clientId = Guid.NewGuid();
+            var request = new CreateAccountRequest
+            {
+                ClientId = clientId,
+                Currency = "USD"
+            };
+
+            // Act
+            var result = await service.CreateAccountAsync(request);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.NotEqual(Guid.Empty, result.Id);
+            Assert.NotNull(result.AccountNumber);
+            Assert.Equal("USD", result.Currency);
+            Assert.Equal(0, result.Balance);
+            Assert.True(result.IsActive);
+        }
+
+        [Fact]
+        public async Task CreateAccountAsync_WhenNoMasterAccountExists_ThrowsInvalidOperationException()
+        {
+            // Arrange
+            var context = GetInMemoryContext();
+            // Don't add a master account
+
+            var service = GetService(context);
             var request = new CreateAccountRequest
             {
                 ClientId = Guid.NewGuid(),
@@ -139,7 +166,7 @@ namespace BankSystem.Tests.Services
             // Act & Assert
             var exception = await Assert.ThrowsAsync<InvalidOperationException>(
                 () => service.CreateAccountAsync(request));
-            Assert.Equal("Master account already exists", exception.Message);
+            Assert.Equal("Cannot create account: Master account (bank) does not exist yet", exception.Message);
         }
 
         #endregion
